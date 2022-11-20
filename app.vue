@@ -1,5 +1,11 @@
 <template>
   <div>
-    <Header />
+    <HeaderBar />
   </div>
 </template>
+
+<style>
+  body{
+    
+  }
+</style>
