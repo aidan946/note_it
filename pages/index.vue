@@ -1,11 +1,10 @@
 <template>
   <div>
     <HeaderBar />
+    <NotesBoard />
   </div>
 </template>
 
-<style>
-  body{
-    
-  }
-</style>
+<script>
+
+</script>
