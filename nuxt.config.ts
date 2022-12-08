@@ -19,5 +19,5 @@ export default defineNuxtConfig({
           ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone']
           : []
     }
-  }
+  },
 })
