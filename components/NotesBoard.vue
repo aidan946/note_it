@@ -16,16 +16,28 @@
         :body="note.body"
       />
     </div>
+    <div v-for="note in databaseNotes">
+      <Note 
+        :title="note.title"
+        :tag="note.tag"
+        :body="note.body"
+      />
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-const { data } = await useAsyncData(async (nuxtApp) => {
-    // fetch and return all "example" records...
-    const records = await nuxtApp.$pb.collection('notes').getFullList();
+<script setup lang="ts">
+const supabase = useSupabaseClient()
 
-    return structuredClone(records);
-  })
+let { data: databaseNotes, error } = await supabase
+  .from('notes')
+  .select('title, tag, body')
+
+console.log(databaseNotes)
+
+</script>
+
+<script lang="ts">
 
 const notes = [
       {
@@ -39,12 +51,13 @@ const notes = [
         body:" Body 2, the superior one..."
       }
     ]
-const note = {
+const testnote = {
   title: "Test title a 3rd time!",
   tag:"Tag 3, maybe?",
   body:" Body, so big, it's almost like a 3rd one.. ay?"
 }
 export default {
+
   data() {
     
     return {

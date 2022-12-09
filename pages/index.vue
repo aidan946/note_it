@@ -1,12 +1,13 @@
 <template>
   <div>
     <HeaderBar />
-    <NotesBoard />
+    <NotesBoard v-if="user" />
+    <Auth v-else />
   </div>
 </template>
 
-<script>
-
+<script setup>
+  const user = useSupabaseUser()
 </script>
 
 <style>
