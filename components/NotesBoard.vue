@@ -7,7 +7,9 @@
       <label>Tag</label>
       <textarea v-model="form.body" />
       <label>Title</label>
-      <button @click="addNote">Add a note</button>
+      <button @click="addNote">
+        Add a note
+      </button>
     </div>
     <div v-for="note in notes">
       <Note 
@@ -29,12 +31,9 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
 
-let { data: databaseNotes, error } = await supabase
+let { data: databaseNotes } = await supabase
   .from('notes')
   .select('title, tag, body')
-
-console.log(databaseNotes)
-
 </script>
 
 <script lang="ts">
@@ -51,11 +50,6 @@ const notes = [
         body:" Body 2, the superior one..."
       }
     ]
-const testnote = {
-  title: "Test title a 3rd time!",
-  tag:"Tag 3, maybe?",
-  body:" Body, so big, it's almost like a 3rd one.. ay?"
-}
 export default {
 
   data() {
@@ -70,8 +64,18 @@ export default {
     }
   },
   methods: {
-    addNote() {
-      this.notes.push(this.form)
+    async addNote() {
+      console.log(this.form)
+      const newNote = {
+        title: this.form.title,
+        tag: this.form.tag,
+        body: this.form.body
+      }
+      const { data, error } = await supabase
+      .from('notes')
+      .insert([
+        { title: 'test title', body: 'test' },
+      ])
     },
     deleteNote(self) {
       this.notes.splice(self)

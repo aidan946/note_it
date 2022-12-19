@@ -6,8 +6,12 @@
       {{ body }}
     </p>
     <div class="centre-buttons">
-      <button @click="editNote">Edit</button>
-      <button @click="$emit('deleteNote')">Delete</button>
+      <button @click="editNote">
+        Edit
+      </button>
+      <button @click="$emit('deleteNote')">
+        Delete
+      </button>
     </div>
   </div>
 </template>
@@ -16,16 +20,23 @@
 export default{
   name: "Note",
   props: {
-    title: String, 
-    tag: String,
-    body: String
+    title: {
+      type: String,
+      default: ''
+    }, 
+    tag: {
+      type: String,
+      default: ''
+    },
+    body: {
+      type: String,
+      default: ''
+    }
   },
+  emits: ['deleteNote'],
   methods: {
     submit() {
       this.$emit('deleteNote')
-    },
-    editNote() {
-
     }
   }
 }

@@ -1,5 +1,8 @@
 <template>
-  <form class="form-widget" @submit.prevent="updateProfile">
+  <form 
+    class="form-widget"
+    @submit.prevent="updateProfile"
+  >
     <div>
       <label for="email">Email</label>
       <input 
@@ -11,11 +14,19 @@
     </div>
     <div>
       <label for="username">Username</label>
-      <input id="username" type="text" v-model="username" />
+      <input 
+        id="username" 
+        v-model="username" 
+        type="text"
+      />
     </div>
     <div>
       <label for="website">Website</label>
-      <input id="website" type="website" v-model="website" />
+      <input
+        id="website"
+        v-model="website"
+        type="website"
+      />
     </div>
 
     <div>
@@ -28,7 +39,13 @@
     </div>
 
     <div>
-      <button class="button block" @click="signOut" :disabled="loading">Sign Out</button>
+      <button
+        class="button block"
+        :disabled="loading"
+        @click="signOut"
+      >
+        Sign Out
+      </button>
     </div>
   </form>
 </template>
