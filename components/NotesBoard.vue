@@ -11,18 +11,13 @@
         Add a note
       </button>
     </div>
-    <div v-for="note in notes">
-      <Note 
-        :title="note.title"
-        :tag="note.tag"
-        :body="note.body"
-      />
-    </div>
     <div v-for="note in databaseNotes">
-      <Note 
+      <Note
+        :id="note.id"
         :title="note.title"
         :tag="note.tag"
         :body="note.body"
+        @delete-note="deleteNote"
       />
     </div>
   </div>
@@ -33,29 +28,16 @@ const supabase = useSupabaseClient()
 
 let { data: databaseNotes } = await supabase
   .from('notes')
-  .select('title, tag, body')
+  .select('id, title, tag, body')
 </script>
 
 <script lang="ts">
 
-const notes = [
-      {
-        title: "Test title",
-        tag:"Tag 1",
-        body:" Body"
-      },
-      {
-        title:"Test title the Second!",
-        tag:"Tag 2",
-        body:" Body 2, the superior one..."
-      }
-    ]
 export default {
 
   data() {
     
     return {
-      notes,
       form : {
       title: '',
       tag: '',
@@ -65,20 +47,20 @@ export default {
   },
   methods: {
     async addNote() {
-      console.log(this.form)
-      const newNote = {
-        title: this.form.title,
-        tag: this.form.tag,
-        body: this.form.body
-      }
-      const { data, error } = await supabase
+      const supabase = useSupabaseClient()  
+      const { data } = await supabase
       .from('notes')
       .insert([
-        { title: 'test title', body: 'test' },
+        { title: this.form.title, tag: this.form.tag, body: this.form.body },
       ])
     },
-    deleteNote(self) {
-      this.notes.splice(self)
+    async deleteNote(id) {
+      console.log("")
+      const supabase = useSupabaseClient()
+      const { data, error } = await supabase
+        .from('notes')
+        .delete()
+        .eq('id', id)
     }
   }
 }

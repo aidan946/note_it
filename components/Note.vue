@@ -9,7 +9,7 @@
       <button @click="editNote">
         Edit
       </button>
-      <button @click="$emit('deleteNote')">
+      <button @click="$emit('deleteNote', this.id)">
         Delete
       </button>
     </div>
@@ -20,6 +20,10 @@
 export default{
   name: "Note",
   props: {
+    id: {
+      type: Number,
+      default: null
+    },
     title: {
       type: String,
       default: ''
@@ -36,7 +40,7 @@ export default{
   emits: ['deleteNote'],
   methods: {
     submit() {
-      this.$emit('deleteNote')
+      this.$emit('deleteNote') 
     }
   }
 }
