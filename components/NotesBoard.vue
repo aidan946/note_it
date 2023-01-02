@@ -11,7 +11,10 @@
         Add a note
       </button>
     </div>
-    <div v-for="note in databaseNotes">
+    <div 
+      v-for="note in databaseNotes" 
+      :key="note.id"
+    >
       <Note
         :id="note.id"
         :title="note.title"
@@ -23,14 +26,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const supabase = useSupabaseClient()
-
-let { data: databaseNotes } = await supabase
-  .from('notes')
-  .select('id, title, tag, body')
-</script>
-
 <script lang="ts">
 
 export default {
@@ -39,11 +34,20 @@ export default {
     
     return {
       form : {
-      title: '',
-      tag: '',
-      body: ''
-  }
+        title: '',
+        tag: '',
+        body: ''
+      },
+      databaseNotes: {}
     }
+  },
+  created() {
+    const supabase = useSupabaseClient()
+   
+    useAsyncData('databaseNotes', async () => {
+      const { data } = await supabase.from('notes').select('id, title, tag, body')
+      this.databaseNotes = data
+    })
   },
   methods: {
     async addNote() {
@@ -53,14 +57,18 @@ export default {
       .insert([
         { title: this.form.title, tag: this.form.tag, body: this.form.body },
       ])
+      .select('id, title, tag, body')
+      this.databaseNotes.push(data[0])
     },
     async deleteNote(id) {
-      console.log("")
       const supabase = useSupabaseClient()
-      const { data, error } = await supabase
+      await supabase
         .from('notes')
         .delete()
         .eq('id', id)
+      let newDatabaseNotes = this.databaseNotes.filter(i => i.id != id)
+
+      this.databaseNotes = newDatabaseNotes
     }
   }
 }
