@@ -17,12 +17,19 @@
           type="email"
           placeholder="Your email"
         />
+        <br />
+        <input
+          v-model="password"
+          class="inputField"
+          type="password"
+          placeholder="Your password"
+        />
       </div>
       <div>
         <input
           type="submit"
           class="button block"
-          :value="loading ? 'Loading' : 'Send magic link'"
+          :value="loading ? 'Loading' : 'Login'"
           :disabled="loading"
         />
       </div>
@@ -35,16 +42,9 @@
 
   const loading = ref(false)
   const email = ref('')
-  const handleLogin = async () => {
-    try {
-      loading.value = true
-      const { error } = await supabase.auth.signInWithOtp({ email: email.value })
-      if (error) throw error
-      alert('Check your email for the login link!')
-    } catch (error) {
-      alert(error.error_description || error.message)
-    } finally {
-      loading.value = false
-    }
-  }
+  const password = ref('')
+  let { data, error } = await supabase.auth.signInWithPassword({
+  email: email,
+  password: password
+})
 </script>

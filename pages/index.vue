@@ -1,7 +1,8 @@
 <template>
   <div>
     <HeaderBar />
-    <NotesBoard />
+    <NotesBoard v-if="user" />
+    <Auth v-else />
   </div>
 </template>
 

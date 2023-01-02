@@ -43,19 +43,21 @@ export default {
   },
   created() {
     const supabase = useSupabaseClient()
-   
     useAsyncData('databaseNotes', async () => {
-      const { data } = await supabase.from('notes').select('id, title, tag, body')
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data } = await supabase.from('notes').select('id, title, tag, body').eq('user_id', user.id)
+      
       this.databaseNotes = data
     })
   },
   methods: {
     async addNote() {
       const supabase = useSupabaseClient()  
+      const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
       .from('notes')
       .insert([
-        { title: this.form.title, tag: this.form.tag, body: this.form.body },
+        { title: this.form.title, tag: this.form.tag, body: this.form.body, user_id: user.id },
       ])
       .select('id, title, tag, body')
       this.databaseNotes.push(data[0])
