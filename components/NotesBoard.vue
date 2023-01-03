@@ -1,22 +1,15 @@
 <template>
   <div style="display: inline;">
-    <div>
-      <input v-model="form.title" />
-      <label>Title</label>
-      <input v-model="form.tag" />
-      <label>Tag</label>
-      <textarea v-model="form.body" />
-      <label>Title</label>
-      <button @click="addNote">
-        Add a note
-      </button>
-    </div>
+    <AddNote 
+      @add-note="addNote"
+    />
     <div 
       v-for="note in databaseNotes" 
       :key="note.id"
     >
       <Note
         :id="note.id"
+        class="mt-2"
         :title="note.title"
         :tag="note.tag"
         :body="note.body"
@@ -33,11 +26,7 @@ export default {
   data() {
     
     return {
-      form : {
-        title: '',
-        tag: '',
-        body: ''
-      },
+      
       databaseNotes: {}
     }
   },
@@ -46,18 +35,22 @@ export default {
     useAsyncData('databaseNotes', async () => {
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase.from('notes').select('id, title, tag, body').eq('user_id', user.id)
+      if (data) {
+        this.databaseNotes = data
+      } else {
+        this.databaseNotes = {}
+      }
       
-      this.databaseNotes = data
     })
   },
   methods: {
-    async addNote() {
+    async addNote(newNoteTitle, newNoteTag, newNoteBody) {
       const supabase = useSupabaseClient()  
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
       .from('notes')
       .insert([
-        { title: this.form.title, tag: this.form.tag, body: this.form.body, user_id: user.id },
+        { title: newNoteTitle, tag: newNoteTag, body: newNoteBody, user_id: user.id },
       ])
       .select('id, title, tag, body')
       this.databaseNotes.push(data[0])
