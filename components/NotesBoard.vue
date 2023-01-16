@@ -3,6 +3,7 @@
     <AddNote 
       @add-note="addNote"
     />
+    <Editor />
     <div 
       v-for="note in databaseNotes" 
       :key="note.id"
@@ -62,7 +63,6 @@ export default {
         .delete()
         .eq('id', id)
       let newDatabaseNotes = this.databaseNotes.filter(i => i.id != id)
-
       this.databaseNotes = newDatabaseNotes
     }
   }

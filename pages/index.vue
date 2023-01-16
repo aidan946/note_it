@@ -1,5 +1,5 @@
 <template>
-  <div class="antialiased m-4 text-slate-500 dark:text-slate-400 bg-slate-900">
+  <div data-theme="night">
     <HeaderBar />
     <NotesBoard v-if="user" />
     <Auth v-else />
@@ -14,7 +14,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
   body {
     font-family: 'Noto Sans', sans-serif;
-    background-color: rgb(15 23 42);
+    background-color: rgb(15 23 41);
   }
   body, html {
   padding: 0;

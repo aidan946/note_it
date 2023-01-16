@@ -5,33 +5,36 @@
   >
     <div class="col-6 form-widget">
       <h1 class="header">
-        Supabase + Nuxt 3
+        Authent
       </h1>
-      <p class="description">
-        Sign in via magic link with your email below
-      </p>
       <div>
         <input
           v-model="email"
-          class="inputField"
+          class="input input-bordered w-full max-w-xs"
           type="email"
           placeholder="Your email"
         />
         <br />
         <input
           v-model="password"
-          class="inputField"
+          class="input input-bordered w-full max-w-xs"
           type="password"
           placeholder="Your password"
         />
       </div>
-      <div>
-        <input
-          type="submit"
-          class="button block"
-          :value="loading ? 'Loading' : 'Login'"
-          :disabled="loading"
-        />
+      <div class="mt-2">
+        <button 
+          class="btn btn-primary"
+          @click="login()"
+        >
+          Login
+        </button>
+        <button 
+          class="btn btn-outline btn-primary ml-2"
+          @click="signup()"
+        >
+          Sign Up
+        </button>
       </div>
     </div>
   </form>
@@ -44,7 +47,21 @@
   const email = ref('')
   const password = ref('')
   let { data, error } = await supabase.auth.signInWithPassword({
-  email: email,
-  password: password
-})
+    email: email,
+    password: password
+  })
+  async function login() {
+    console.log("Login")
+    let { data, error } = await supabase.auth.signInWithPassword({
+      email: 'aidanstevens92@gmail.com',
+      password: 'coolme66'
+    })
+  }
+  async function signup() {
+    console.log("Signup")
+    let { data, error } = await supabase.auth.signUp({
+      email: 'aidanstevens92@gmail.com',
+      password: 'coolme66'
+    })
+  }
 </script>

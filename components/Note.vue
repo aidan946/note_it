@@ -1,34 +1,34 @@
 <template>
-  <div class="dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl">
-    <div v-if="edit === false">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-white">
+  <div class="card w-96 bg-neutral text-neutral-content">
+    <div v-if="edit === false" class="card-body">
+      <h1 class="card-title">
         {{ noteTitle }}
       </h1>
-      <h3 class="text-slate-900 dark:text-white mt-2 text-base font-medium tracking-tight">
+      <h3>
         {{ noteTag }}
       </h3>
-      <p class="text-slate-500 dark:text-slate-400 mt-3 text-sm">
+      <p>
         {{ noteBody }}
       </p>
-      <div class="centre-buttons">
+      <div class="card-actions justify-end">
         <button 
-          class="py-2 px-3 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-md shadow focus:outline-none " 
+          class="btn btn-primary " 
           @click="edit = true"
         >
           Edit
         </button>
         <button 
-          class="py-2 px-3 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-md shadow focus:outline-none"
+          class="btn btn-primary"
           @click="$emit('deleteNote', id)"
         >
           Delete
         </button>
       </div>
     </div>
-    <div v-if="edit === true">
+    <div v-if="edit === true" class="card-body">
       <input 
         v-model="noteTitle" 
-        class="mt-2 px-2 py-1 bg-slate-800 border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
+        class="mt-2 px-2 py-1 bg-slate-800 border shadow-sm  border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
       />
       <input 
         v-model="noteTag" 
@@ -38,15 +38,15 @@
         v-model="noteBody" 
         class="mt-3 px-2 py-1 bg-slate-800 border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
       />
-      <div class="centre-buttons">
+      <div class="card-actions justify-end">
         <button 
-          class="py-2 px-3 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-md shadow focus:outline-none"
+          class="btn btn-primary"
           @click="edit = false"
         >
           Cancel
         </button>
         <button 
-          class="py-2 px-3 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-md shadow focus:outline-none"
+          class="btn btn-primary"
           @click="submitEdit"
         >
           Submit
