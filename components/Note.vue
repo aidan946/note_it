@@ -3,9 +3,6 @@
     <div class="card-body">
       <div class="flex">
         <editor-content class="" :editor="titleEditor" />
-        <div>
-          <button for="`${this.id}`" class="btn btn-circle btn-outline">P</button>
-        </div>
       </div>
       <editor-content class="" :editor="bodyEditor" />
       <div class="card-actions justify-end">
@@ -21,16 +18,6 @@
         >
           Delete
         </button>
-      </div>
-    </div>
-    <input type="checkbox" id="editor-modal" class="modal-toggle" />
-    <div class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-        <p class="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
-        <div class="modal-action">
-          <label for="my-modal" class="btn">Yay!</label>
-        </div>
       </div>
     </div>
   </div>
@@ -64,6 +51,7 @@ export default{
   emits: ['deleteNote'],
   setup(props) {
     
+    const noteId = props.id;
     const noteTitle = props.title;
     const noteBody = props.body;
 
