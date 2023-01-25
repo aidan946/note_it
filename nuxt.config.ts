@@ -6,8 +6,6 @@ export default defineNuxtConfig({
     transpile:
       process.env.NODE_ENV === 'production'
         ? [
-            'naive-ui',
-            'vueuc',
             '@css-render/vue3-ssr',
             '@juggle/resize-observer'
           ]
@@ -15,10 +13,6 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include:
-        process.env.NODE_ENV === 'development'
-          ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone']
-          : []
     }
   },
   css: ['~/assets/css/main.css'],

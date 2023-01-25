@@ -1,21 +1,16 @@
 <template>
   <div class="card w-96 bg-neutral text-neutral-content">
-    <div v-if="edit === false" class="card-body">
-      <h1 class="card-title">
-        {{ noteTitle }}
-      </h1>
-      <h3>
-        {{ noteTag }}
-      </h3>
-      <p>
-        {{ noteBody }}
-      </p>
+    <div class="card-body">
+      <div class="flex">
+        <editor-content class="" :editor="titleEditor" />
+      </div>
+      <editor-content class="" :editor="bodyEditor" />
       <div class="card-actions justify-end">
         <button 
           class="btn btn-primary " 
-          @click="edit = true"
+          @click="submitEdit"
         >
-          Edit
+          Save
         </button>
         <button 
           class="btn btn-primary"
@@ -25,40 +20,20 @@
         </button>
       </div>
     </div>
-    <div v-if="edit === true" class="card-body">
-      <input 
-        v-model="noteTitle" 
-        class="mt-2 px-2 py-1 bg-slate-800 border shadow-sm  border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
-      />
-      <input 
-        v-model="noteTag" 
-        class="mt-2 px-2 py-1 bg-slate-800 border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
-      />
-      <textarea 
-        v-model="noteBody" 
-        class="mt-3 px-2 py-1 bg-slate-800 border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block rounded-md sm:text-sm focus:ring-1"
-      />
-      <div class="card-actions justify-end">
-        <button 
-          class="btn btn-primary"
-          @click="edit = false"
-        >
-          Cancel
-        </button>
-        <button 
-          class="btn btn-primary"
-          @click="submitEdit"
-        >
-          Submit
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Heading from '@tiptap/extension-heading'
+import Text from '@tiptap/extension-text'
+import { useEditor, EditorContent } from '@tiptap/vue-3'
 export default{
   name: "Note",
+  components: {
+    EditorContent,
+  },
   props: {
     id: {
       type: Number,
@@ -68,35 +43,71 @@ export default{
       type: String,
       default: ''
     }, 
-    tag: {
-      type: String,
-      default: ''
-    },
     body: {
       type: String,
       default: ''
     }
   },
   emits: ['deleteNote'],
-  data() {
+  setup(props) {
+    
+    const noteId = props.id;
+    const noteTitle = props.title;
+    const noteBody = props.body;
+
+    const titleEditor = useEditor({
+      content: noteTitle,
+      extensions: [
+        Document,
+        Heading.configure({
+          HTMLAttributes: {
+            class: 'card-title text-3xl bold mb-3'
+          },
+        }),
+        Text,
+      ],
+      editorProps: {
+        attributes: {
+          class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl  focus:outline-none',
+        },
+      },
+    })
+
+    const bodyEditor = useEditor({
+      content: noteBody,
+      extensions: [
+        Document,
+        Paragraph.configure({
+          HTMLAttributes: {
+          },
+        }),
+        Text,
+      ],
+      editorProps: {
+        attributes: {
+          class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl  focus:outline-none p-3',
+        },
+      },
+    })
+
     return {
-      edit:false,
-      noteTitle: this.title,
-      noteTag: this.tag,
-      noteBody: this.body,
+      noteTitle,
+      noteBody,
+      titleEditor,
+      bodyEditor
     }
   },
   methods: {
     submit() {
-      this.$emit('deleteNote') 
+      this.$emit('deleteNote')
     },
     async submitEdit() {
       const supabase = useSupabaseClient()
       await supabase
         .from('notes')
-        .update({ title: this.noteTitle, tag: this.noteTag, body: this.noteBody })
+        .update({ title: this.titleEditor.getHTML(), body: this.bodyEditor.getHTML() })
         .eq('id', this.id)
-      this.edit = false
+        // Flash success here
     }
   }
 }
@@ -112,11 +123,4 @@ export default{
   .centre-buttons button{
   margin: 1rem;
   }
-
-  .note{
-    padding: 0.5rem;
-    border: 1px solid black;
-    border-radius: 10px;
-  }
-  
 </style>
