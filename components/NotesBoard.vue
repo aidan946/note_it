@@ -3,7 +3,6 @@
     <AddNote 
       @add-note="addNote"
     />
-    <Editor />
     <div 
       v-for="note in databaseNotes" 
       :key="note.id"
@@ -12,7 +11,6 @@
         :id="note.id"
         class="mt-2"
         :title="note.title"
-        :tag="note.tag"
         :body="note.body"
         @delete-note="deleteNote"
       />
@@ -23,7 +21,6 @@
 <script lang="ts">
 
 export default {
-
   data() {
     
     return {
@@ -35,7 +32,7 @@ export default {
     const supabase = useSupabaseClient()
     useAsyncData('databaseNotes', async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      const { data } = await supabase.from('notes').select('id, title, tag, body').eq('user_id', user.id)
+      const { data } = await supabase.from('notes').select('id, title, body').eq('user_id', user.id)
       if (data) {
         this.databaseNotes = data
       } else {
@@ -45,15 +42,15 @@ export default {
     })
   },
   methods: {
-    async addNote(newNoteTitle, newNoteTag, newNoteBody) {
+    async addNote(newNoteTitle, newNoteBody) {
       const supabase = useSupabaseClient()  
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
       .from('notes')
       .insert([
-        { title: newNoteTitle, tag: newNoteTag, body: newNoteBody, user_id: user.id },
+        { title: newNoteTitle, body: newNoteBody, user_id: user.id },
       ])
-      .select('id, title, tag, body')
+      .select('id, title, body')
       this.databaseNotes.push(data[0])
     },
     async deleteNote(id) {
