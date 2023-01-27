@@ -1,22 +1,34 @@
 <template>
-  <div class="card w-96 bg-neutral text-neutral-content">
+  <div class="card-compact rounded-lg w-96 bg-neutral text-neutral-content">
     <div class="card-body">
       <div class="flex">
-        <editor-content class="" :editor="titleEditor" />
+        <editor-content :editor="titleEditor" />
       </div>
-      <editor-content class="" :editor="bodyEditor" />
-      <div class="card-actions justify-end">
+      <editor-content :editor="bodyEditor" />
+      <div class="flex space-x-2">
+        <div v-for="tag in tags">
+          <div class="badge badge-primary">{{ tag.name }}</div>
+        </div>
+      </div>
+     
+      <div class="card-actions justify-end mr-0">
         <button 
-          class="btn btn-primary " 
-          @click="submitEdit"
+          class="btn-sm btn-primary rounded-lg" 
+          @click=""
         >
-          Save
+          <i class="ri-edit-box-fill"></i>
         </button>
         <button 
-          class="btn btn-primary"
+          class="btn-sm btn-primary rounded-lg" 
+          @click="submitEdit"
+        >
+          <i class="ri-save-fill"></i>
+        </button>
+        <button 
+          class="btn-sm btn-primary rounded-lg"
           @click="$emit('deleteNote', id)"
         >
-          Delete
+          <i class="ri-delete-bin-7-fill"></i>
         </button>
       </div>
     </div>
@@ -29,6 +41,7 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Heading from '@tiptap/extension-heading'
 import Text from '@tiptap/extension-text'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import 'remixicon/fonts/remixicon.css'
 export default{
   name: "Note",
   components: {
@@ -50,10 +63,13 @@ export default{
   },
   emits: ['deleteNote'],
   setup(props) {
-    
-    const noteId = props.id;
+
+    const noteID = props.id;
     const noteTitle = props.title;
     const noteBody = props.body;
+
+    const tags = ref([])
+    const modal = false
 
     const titleEditor = useEditor({
       content: noteTitle,
@@ -85,16 +101,25 @@ export default{
       ],
       editorProps: {
         attributes: {
-          class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl  focus:outline-none p-3',
+          class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl  focus:outline-none pb-2',
         },
       },
     })
+
+    onMounted(async () => {
+      const supabase = useSupabaseClient()
+      const { data } = await supabase.from('tags').select('name').eq('note_id', noteID)
+      if (data) {
+        tags.value = data  
+      }
+    });
 
     return {
       noteTitle,
       noteBody,
       titleEditor,
-      bodyEditor
+      bodyEditor,
+      tags
     }
   },
   methods: {
