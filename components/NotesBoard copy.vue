@@ -42,7 +42,7 @@ export default {
     })
   },
   methods: {
-    async addNote(newNoteTitle, newNoteBody) {
+    async addNote(newNoteTitle: string, newNoteBody: string) {
       const supabase = useSupabaseClient()  
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
@@ -53,13 +53,13 @@ export default {
       .select('id, title, body')
       this.databaseNotes.push(data[0])
     },
-    async deleteNote(id) {
+    async deleteNote(id: unknown) {
       const supabase = useSupabaseClient()
       await supabase
         .from('notes')
         .delete()
         .eq('id', id)
-      let newDatabaseNotes = this.databaseNotes.filter(i => i.id != id)
+      let newDatabaseNotes = this.databaseNotes.filter((i: { id: number }) => i.id != id)
       this.databaseNotes = newDatabaseNotes
     }
   }

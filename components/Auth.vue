@@ -53,15 +53,15 @@
   async function login() {
     console.log("Login")
     let { data, error } = await supabase.auth.signInWithPassword({
-      email: 'aidanstevens92@gmail.com',
-      password: 'coolme66'
+      email: '',
+      password: ''
     })
   }
   async function signup() {
     console.log("Signup")
     let { data, error } = await supabase.auth.signUp({
-      email: 'aidanstevens92@gmail.com',
-      password: 'coolme66'
+      email: '',
+      password: ''
     })
   }
 </script>

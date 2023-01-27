@@ -1,10 +1,11 @@
 <template>
-  <div class="flex">
-    <div class="w-1/12">
-      This is the menu bar
+  <div class="flex w-screen">
+    <div class="min-w-64 w-64 max-w-64">
+      <NotesMenuSideBar @navigate-page="navigatePage" />
     </div>
     <div>
-      <NotesHome />
+      <NotesHome v-if="page === 'home'" />
+      <NotesMyNotes v-if="page === 'notes'" />
     </div>
   </div>
 </template>
@@ -14,45 +15,13 @@
 export default {
 
   data() {
-    
     return {
-      
-      databaseNotes: {}
+      page:  "home",
     }
   },
-  created() {
-    const supabase = useSupabaseClient()
-    useAsyncData('databaseNotes', async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      const { data } = await supabase.from('notes').select('id, title, tag, body').eq('user_id', user.id)
-      if (data) {
-        this.databaseNotes = data
-      } else {
-        this.databaseNotes = {}
-      }
-      
-    })
-  },
   methods: {
-    async addNote(newNoteTitle, newNoteTag, newNoteBody) {
-      const supabase = useSupabaseClient()  
-      const { data: { user } } = await supabase.auth.getUser()
-      const { data } = await supabase
-      .from('notes')
-      .insert([
-        { title: newNoteTitle, tag: newNoteTag, body: newNoteBody, user_id: user.id },
-      ])
-      .select('id, title, tag, body')
-      this.databaseNotes.push(data[0])
-    },
-    async deleteNote(id) {
-      const supabase = useSupabaseClient()
-      await supabase
-        .from('notes')
-        .delete()
-        .eq('id', id)
-      let newDatabaseNotes = this.databaseNotes.filter(i => i.id != id)
-      this.databaseNotes = newDatabaseNotes
+    navigatePage(page: string){
+      this.page = page
     }
   }
 }

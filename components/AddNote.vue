@@ -1,26 +1,3 @@
-<!-- <template>
-
-  <button 
-    class=" m-3 py-2 px-3 bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-semibold rounded-md shadow focus:outline-none"
-    @click="showModal"
-  >
-    Toggle modal
-  </button>
-
-
-  <div 
-    id="staticModal" 
-    tabindex="-1" 
-    hidden="true" 
-    class="fixed top-50 left-50 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
-  >
-    <div>
-      
-      
-    </div>
-  </div>
-</template> -->
-
 <template>
   <div>
     <button

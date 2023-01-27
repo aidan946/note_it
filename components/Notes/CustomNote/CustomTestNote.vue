@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-96 bg-base-100 shadow-xl">
+  <div class="card m-4 w-96 bg-base-100 shadow-xl">
     <div class="card-body">
       <h2 class="card-title">Card title!</h2>
       <p>If a dog chews shoes whose shoes does he choose?</p>
