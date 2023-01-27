@@ -10,7 +10,6 @@
           <div class="badge badge-primary">{{ tag.name }}</div>
         </div>
       </div>
-     
       <div class="card-actions justify-end mr-0">
         <button 
           class="btn-sm btn-primary rounded-lg" 
