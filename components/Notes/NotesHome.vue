@@ -1,6 +1,9 @@
 <template>
-  <div class="w-full justify-center mt-5 pr-16">
-    <div class="justify-center">
+  <div class="w-full justify-center mt-5 pr-16 absolute
+        inset-0
+        flex
+        justify-center">
+    <div class="">
       <h1 class="flex justify-center text-2xl">
         Add a new Note
       </h1>
