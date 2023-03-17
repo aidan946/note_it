@@ -1,15 +1,14 @@
 <template>
-  <div class="w-full justify-center mt-5 pr-16 absolute
+  <div class="w-full mt-2 pr-56
         inset-0
-        flex
-        justify-center">
-    <div class="">
-      <h1 class="flex justify-center text-2xl">
+  ">
+    <div class="mt-8">
+      <h1 class="flex justify-center text-2xl ">
         Add a new Note
       </h1>
-      <NotesHomeNewNote class="mt-4" />
+      <NotesHomeNewNote class="mt-4 max-w-xl mx-auto" />
     </div>
-    <div class="mt-10">
+    <div class="mt-16">
       <div>
         <h1 class="flex justify-center text-2xl">
           Commonly Veiwed Notes
@@ -19,11 +18,11 @@
         <div 
           v-for="note in databaseNotes"
           :key="note.id"
-          class="m-4"
+          class="m-2"
         >
           <NotesNote
             :id="note.id"
-            class="mt-2"
+            class=""
             :title="note.title"
             :body="note.body"
             @delete-note="deleteNote"

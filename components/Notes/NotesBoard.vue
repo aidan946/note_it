@@ -5,7 +5,7 @@
     </div>
     <div>
       <NotesHome v-if="page === 'home'" />
-      <NotesMyNotes v-if="page === 'notes'" />
+      <NotesMyNotes v-if="page === 'notes'" class="mt-10" />
     </div>
   </div>
 </template>

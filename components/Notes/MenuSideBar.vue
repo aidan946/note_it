@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full divide-y divide-solid ">
+  <div class="h-full divide-y divide-solid">
     <div class="drawer-side">
       <label 
         for="my-drawer-2" 
@@ -8,7 +8,11 @@
       </label> 
       <ul class="menu p-4 w-48 bg-base-100 text-base-content">
         <!-- Sidebar content here -->
-        <li><a>New Note</a></li>
+        <li class="flex flex-wrap justify-center">
+          <AddNote 
+            @add-note="addNote"
+          />
+        </li>
         <li @click="$emit('navigatePage', 'home')">
           <a>Home</a>
         </li>

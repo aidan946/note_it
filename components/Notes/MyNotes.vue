@@ -1,11 +1,12 @@
 <template>
-  <div style="display: inline;">
-    <AddNote 
-      @add-note="addNote"
-    />
+  <div>
+    My Notes:
+  </div>
+  <div class="flex flex-wrap justify-center" >
     <div 
       v-for="note in databaseNotes" 
       :key="note.id"
+      class="m-2"
     >
       <NotesNote
         :id="note.id"

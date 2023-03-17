@@ -1,6 +1,6 @@
 <template>
   <div data-theme="night">
-    <HeaderBar />
+    <HeaderBar v-if="user" />
     <div></div>
     <NotesBoard v-if="user" />
     <Auth v-else />
