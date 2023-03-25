@@ -8,7 +8,8 @@
         flex
         items-center
         justify-center
-        bg-gray-700 bg-opacity-50
+        bg-gray-700 
+        bg-opacity-50
       "
     >
       <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
