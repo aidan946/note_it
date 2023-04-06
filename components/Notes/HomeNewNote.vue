@@ -23,7 +23,6 @@
               class="menu-item"
               :class="{ 'is-active': item.isActive ? item.isActive(): null }"
               :title="item.title"
-
               @click="item.action"
             >
               <i :class="`ri-${item.icon} `" />
@@ -39,12 +38,13 @@
         <div class="card-actions justify-end mr-0">
           <button 
             class="btn-sm btn-primary rounded-lg" 
-            @click="submitEdit"
+            @click="saveNote"
           >
             <i class="ri-save-fill"></i>
           </button>
           <button 
             class="btn-sm btn-error rounded-lg"
+            @click="resetNote"
           >
             <i class="ri-delete-bin-7-fill"></i>
           </button>
@@ -244,8 +244,21 @@ export default{
     this.editor.destroy()
   },
   methods: {
-    async submitEdit() {
-        // Flash success here
+    async saveNote() {
+      const supabase = useSupabaseClient()  
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data } = await supabase
+      .from('notes')
+      .insert([
+        { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
+      ])
+      .select('id, title, body')
+      this.titleEditor.chain().focus().setContent("Title").run()
+      this.editor.chain().focus().setContent("Body").run()
+    },
+    async resetNote() {
+      this.titleEditor.chain().focus().setContent("Title").run()
+      this.editor.chain().focus().setContent("Body").run()
     }
   }
 }

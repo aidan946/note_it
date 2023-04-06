@@ -2,7 +2,7 @@
   <div>
     My Notes:
   </div>
-  <div class="flex flex-wrap justify-center" >
+  <div class="flex flex-wrap justify-center overflow-auto max-h-full" >
     <div 
       v-for="note in databaseNotes" 
       :key="note.id"

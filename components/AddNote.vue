@@ -40,7 +40,6 @@
                   class="menu-item"
                   :class="{ 'is-active': item.isActive ? item.isActive(): null }"
                   :title="item.title"
-
                   @click="item.action"
                 >
                   <i :class="`ri-${item.icon} `" />
@@ -77,11 +76,9 @@
         </div>
       </div>
     </div>
-    <div 
-      class=""
-    >
-    <a @click="toggleModal" >New Note</a>
-  </div>
+    <div>
+      <a @click="$emit('addNote')" >New Note</a>
+    </div>
   </div>
 </template>
 
