@@ -8,10 +8,8 @@
       </label> 
       <ul class="menu p-4 w-48 bg-base-100 text-base-content">
         <!-- Sidebar content here -->
-        <li class="flex flex-wrap justify-center">
-          <AddNote 
-            @add-note="addNote"
-          />
+        <li @click="$emit('addNote')">
+          <a>Add Note</a>
         </li>
         <li @click="$emit('navigatePage', 'home')">
           <a>Home</a>
@@ -27,7 +25,7 @@
 <script>
 export default{
   name: "MenuSideBar",
-  emits: ['navigatePage'],
+  emits: ['navigatePage', 'addNote'],
   data() {
     return {
       edit:false,
@@ -38,7 +36,8 @@ export default{
   },
   methods: {
     submit() {
-      this.$emit('navigatePage') 
+      this.$emit('navigatePage')
+      this.$emit('addNote')
     }
   }
 }
