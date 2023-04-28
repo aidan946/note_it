@@ -10,6 +10,7 @@
         items-center
         justify-center
         bg-gray-700 bg-opacity-50
+        z-0
       "
     >
       <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">

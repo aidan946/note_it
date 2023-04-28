@@ -11,11 +11,11 @@
         <li @click="$emit('addNote')">
           <a>Add Note</a>
         </li>
-        <li @click="$emit('navigatePage', 'home')">
-          <a>Home</a>
+        <li>
+          <NuxtLink to="/notes/home">Home</NuxtLink>
         </li>
-        <li @click="$emit('navigatePage', 'notes')">
-          <a>My Notes</a>
+        <li>
+          <NuxtLink to="/notes/my-notes">My Notes</NuxtLink>
         </li>
       </ul>
     </div>

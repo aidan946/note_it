@@ -1,17 +1,11 @@
-<!-- eslint-disable vue/no-setup-props-destructure -->
 <template>
+  <div>
+    <HeaderBar />
   <div class="flex w-screen">
     <div class="min-w-64 w-64 max-w-64">
       <NotesMenuSideBar 
         @navigate-page="navigatePage"
         @add-note="addNote"
-      />
-    </div>
-    <div>
-      <NotesHome v-if="page === 'home'" />
-      <NotesMyNotes 
-        v-if="page === 'notes'" 
-        class="mt-10"
       />
     </div>
     <div 
@@ -21,7 +15,8 @@
       flex
       items-center
       justify-center
-      bg-gray-700 bg-opacity-50"
+      bg-gray-700 bg-opacity-50
+      z-10"
     >
       <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
         <div class="card-body">
@@ -79,6 +74,8 @@
         </div>
       </div>
     </div>
+    <slot />
+  </div>
   </div>
 </template>
 
@@ -302,3 +299,4 @@ export default {
   }
 }
 </script>
+
