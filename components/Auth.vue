@@ -64,7 +64,12 @@ export default {
         email: this.email,
         password: this.password
       })
-      if (error) this.error = error
+      if (error) {
+        this.error = error
+      } else {
+        navigateTo('/notes/home')
+      }
+
     },
     async  signup() {
       console.log("Signup")

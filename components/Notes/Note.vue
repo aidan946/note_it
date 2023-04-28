@@ -10,7 +10,7 @@
         items-center
         justify-center
         bg-gray-700 bg-opacity-50
-        z-0
+        z-10
       "
     >
       <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
@@ -80,7 +80,7 @@
     </div>
     <div 
       v-else 
-      class="card-compact rounded-lg w-96 bg-neutral text-neutral-content"
+      class="card-compact rounded-lg w-96 bg-neutral text-neutral-content v-0"
     >
       <div class="card-body">
         <div class="flex">

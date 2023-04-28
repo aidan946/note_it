@@ -3,7 +3,6 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/supabase',
-    '@nuxtjs/eslint-module',
   ],
   build: {
     transpile:

@@ -59,9 +59,9 @@
 export default {
   methods: {
     async  logout() {
-      console.log("Signup")
       const supabase = useSupabaseClient()
       let { error } = await supabase.auth.signOut()
+      if (error) console.log(error) 
     }
   }
 }
