@@ -1,7 +1,9 @@
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/supabase'],
+  modules: [
+    '@nuxtjs/supabase',
+  ],
   build: {
     transpile:
       process.env.NODE_ENV === 'production'
@@ -20,6 +22,7 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
+      'tailwindcss/nesting': {},
     },
   },
 })

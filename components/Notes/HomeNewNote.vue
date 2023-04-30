@@ -1,117 +1,50 @@
-<!-- eslint-disable vue/no-setup-props-destructure -->
 <template>
-  <div>
-    <div
-      v-if="loadModal"
-      class="
-        absolute
-        inset-0
-        flex
-        items-center
-        justify-center
-        bg-gray-700 bg-opacity-50
-      "
+  <div 
+    v-if="editor"
+    class="editor border rounded-lg"
+  >
+    <div 
+      class="card-compact rounded-lg bg-neutral text-neutral-content"
     >
-      <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
-        <div class="card-body">
-          <div class="relative">
-            <editor-content :editor="titleEditor" />
-            <a 
-              class="btn btn-sm btn-circle absolute right-0 top-0" 
-              @click="toggleModal"
-            >
-              ✕
-            </a>
-          </div>
-          <div class="bg-gray-700 rounded p-4">
-            <div class="flex text-lg	h-8">
-              <div 
-                v-for="(item, index) in items" 
-                :key="item.icon"
-                class="p-1"
-              >
-                <div 
-                  v-if="item.type === 'divider'" 
-                  :key="`divider${index}`"
-                > 
-                  | 
-                </div>
-                <button
-                  class="menu-item"
-                  :class="{ 'is-active': item.isActive ? item.isActive(): null }"
-                  :title="item.title"
-
-                  @click="item.action"
-                >
-                  <i :class="`ri-${item.icon} `" />
-                </button>
-              </div>
-            </div>
-            <div class="divider" />
-            <editor-content :editor="editor" />
-          </div>
-          <div class="flex space-x-2">
+      <div class="card-body">
+        <div class="flex text-lg h-8">
+          <div 
+            v-for="(item, index) in items" 
+            :key="item.icon"
+            class="p-1"
+          >
             <div 
-              v-for="tag in tags"
-              :key="tag.id"
-            >
-              <div class="badge badge-primary mt-4">
-                {{ tag.name }}
-              </div>
+              v-if="item.type === 'divider'" 
+              :key="`divider${index}`"
+            > 
+              | 
             </div>
-          </div>
-          <div class="card-actions justify-end mr-0">
-            <button 
-              class="btn-sm btn-primary rounded-lg" 
-              @click="submitEdit"
+            <button
+              class="menu-item"
+              :class="{ 'is-active': item.isActive ? item.isActive(): null }"
+              :title="item.title"
+              @click="item.action"
             >
-              <i class="ri-save-fill"></i>
-            </button>
-            <button 
-              class="btn-sm btn-error rounded-lg"
-              @click="$emit('deleteNote', id)"
-            >
-              <i class="ri-delete-bin-7-fill"></i>
+              <i :class="`ri-${item.icon} `" />
             </button>
           </div>
         </div>
-      </div>
-    </div>
-    <div 
-      v-else 
-      class="card-compact rounded-lg w-96 bg-neutral text-neutral-content"
-    >
-      <div class="card-body">
-        <div class="flex">
+        <div class="flex mt-3">
           <editor-content :editor="titleEditor" />
         </div>
         <editor-content :editor="editor" />
         <div class="flex space-x-2">
-          <div 
-            v-for="tag in tags"
-            :key="tag.id"
-          >
-            <div class="badge badge-primary">
-              {{ tag.name }}
-            </div>
-          </div>
         </div>
         <div class="card-actions justify-end mr-0">
           <button 
-            class="btn-sm btn-success rounded-lg" 
-            @click="toggleModal"
-          >
-            <i class="ri-edit-box-fill"></i>
-          </button>
-          <button 
             class="btn-sm btn-primary rounded-lg" 
-            @click="submitEdit"
+            @click="saveNote"
           >
             <i class="ri-save-fill"></i>
           </button>
           <button 
             class="btn-sm btn-error rounded-lg"
-            @click="$emit('deleteNote', id)"
+            @click="resetNote"
           >
             <i class="ri-delete-bin-7-fill"></i>
           </button>
@@ -132,33 +65,15 @@ import TaskList from '@tiptap/extension-task-list'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import 'remixicon/fonts/remixicon.css'
 export default{
-  name: "Note",
+  name: "HomeNote",
   components: {
     EditorContent,
   },
-  props: {
-    id: {
-      type: Number,
-      default: null
-    },
-    title: {
-      type: String,
-      default: ''
-    }, 
-    body: {
-      type: String,
-      default: ''
-    },
-  },
-  emits: ['deleteNote'],
-  data(props) {
+  data() {
     const loadModal = false
     return {
       loadModal,
       tags: [],
-      noteID: props.id,
-      noteTitle: props.title,
-      noteBody: props.body,
       titleEditor: null,
       editor: null,
       items: [
@@ -286,7 +201,7 @@ export default{
   },
   mounted() {
     this.titleEditor = new Editor({
-      content: this.noteTitle,
+      content: "Title",
       extensions: [
         Document,
         Heading.configure({
@@ -303,7 +218,7 @@ export default{
       },
     })
     this.editor = new Editor({
-      content: this.noteBody,
+      content: "Body",
       extensions: [
         StarterKit,
         Document,
@@ -323,37 +238,27 @@ export default{
         },
       },
     })
-
-    async () => {
-      const supabase = useSupabaseClient()
-      const { data } = await supabase.from('id, tags').select('name').eq('note_id', this.noteID)
-      if (data) {
-        tags.value = data  
-      }
-    }
   },
   beforeUnmount() {
     this.titleEditor.destroy()
     this.editor.destroy()
   },
   methods: {
-    toggleModal() {
-      if (this.loadModal == true) {
-        this.loadModal = false
-      } else {
-        this.loadModal = true
-      }
+    async saveNote() {
+      const supabase = useSupabaseClient()  
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data } = await supabase
+      .from('notes')
+      .insert([
+        { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
+      ])
+      .select('id, title, body')
+      this.titleEditor.chain().focus().setContent("Title").run()
+      this.editor.chain().focus().setContent("Body").run()
     },
-    submit() {
-      this.$emit('deleteNote')
-    },
-    async submitEdit() {
-      const supabase = useSupabaseClient()
-      await supabase
-        .from('notes')
-        .update({ title: this.titleEditor.getHTML(), body: this.editor.getHTML() })
-        .eq('id', this.id)
-        // Flash success here
+    async resetNote() {
+      this.titleEditor.chain().focus().setContent("Title").run()
+      this.editor.chain().focus().setContent("Body").run()
     }
   }
 }

@@ -1,13 +1,14 @@
 <template>
   <div data-theme="night">
-    <HeaderBar />
-    <NotesBoard v-if="user" />
-    <Auth v-else />
+    <Auth />
   </div>
 </template>
 
 <script setup>
-  const user = useSupabaseUser()
+  const supabase = useSupabaseClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) navigateTo('/notes/home')
 </script>
 
 <style>
