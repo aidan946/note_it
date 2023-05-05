@@ -18,6 +18,10 @@
           <NuxtLink to="/notes/my-notes">My Notes</NuxtLink>
         </li>
       </ul>
+      <div class="divider"></div> 
+        <li class="flex">
+          <a>My Tags: <button class="btn btn-ghost btn-circle avatar" @click="$emit('addTag')">+</button></a>
+        </li>
     </div>
   </div>
 </template>
@@ -25,7 +29,7 @@
 <script lang="ts">
 export default{
   name: "MenuSideBar",
-  emits: ['addNote'],
+  emits: ['addNote','addTag'],
   data() {
     return {
       edit:false,
@@ -34,6 +38,7 @@ export default{
   methods: {
     submit() {
       this.$emit('addNote')
+      this.$emit('addTag')
     }
   }
 }

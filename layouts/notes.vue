@@ -1,81 +1,119 @@
 <template>
   <div>
     <HeaderBar />
-  <div class="flex w-screen">
-    <div class="min-w-64 w-64 max-w-64">
-      <NotesMenuSideBar 
-        @navigate-page="navigatePage"
-        @add-note="addNote"
-      />
-    </div>
-    <div 
-      v-if="addNewNote"
-      class="absolute
-      inset-0
-      flex
-      items-center
-      justify-center
-      bg-gray-700 bg-opacity-50
-      z-10"
-    >
-      <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
-        <div class="card-body">
-          <div class="relative">
-            <h1 class="text-2xl">Add New Note</h1>
-            <a 
-              class="btn btn-sm btn-circle absolute right-0 top-0" 
-              @click="addNote"
-            >
-              ✕
-            </a>
-          </div>
-          <div class="bg-gray-700 rounded p-4">
-            <div class="flex text-lg	h-8">
-              <div 
-                v-for="(item, index) in items" 
-                :key="item.icon"
-                class="p-1"
+    <div class="flex w-screen">
+      <div class="min-w-64 w-64 max-w-64">
+        <NotesMenuSideBar 
+          @navigate-page="navigatePage"
+          @add-note="addNote"
+          @add-tag="addTag"
+        />
+      </div>
+      <div 
+        v-if="addNewNote"
+        class="absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        bg-gray-700 bg-opacity-50
+        z-10"
+      >
+        <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
+          <div class="card-body">
+            <div class="relative">
+              <h1 class="text-2xl">Add New Note</h1>
+              <a 
+                class="btn btn-sm btn-circle absolute right-0 top-0" 
+                @click="addNote"
               >
-                <div 
-                  v-if="item.type === 'divider'" 
-                  :key="`divider${index}`"
-                > 
-                  | 
-                </div>
-                <button
-                  class="menu-item"
-                  :class="{ 'is-active': item.isActive ? item.isActive(): null }"
-                  :title="item.title"
-
-                  @click="item.action"
-                >
-                  <i :class="`ri-${item.icon} `" />
-                </button>
-              </div>
+                ✕
+              </a>
             </div>
-            <div class="divider" />
-            <editor-content :editor="titleEditor" />
-            <editor-content class="mt-4" :editor="editor" />
-          </div>
-          <div class="card-actions justify-end mr-0">
-            <button 
-              class="btn-sm btn-primary rounded-lg" 
-              @click="saveNote"
-            >
-              <i class="ri-save-fill"></i>
-            </button>
-            <button 
-              class="btn-sm btn-error rounded-lg"
-              @click="resetNote"
-            >
-              <i class="ri-delete-bin-7-fill"></i>
-            </button>
+            <div class="bg-gray-700 rounded p-4">
+              <div class="flex text-lg	h-8">
+                <div 
+                  v-for="(item, index) in items" 
+                  :key="item.icon"
+                  class="p-1"
+                >
+                  <div 
+                    v-if="item.type === 'divider'" 
+                    :key="`divider${index}`"
+                  > 
+                    | 
+                  </div>
+                  <button
+                    class="menu-item"
+                    :class="{ 'is-active': item.isActive ? item.isActive(): null }"
+                    :title="item.title"
+
+                    @click="item.action"
+                  >
+                    <i :class="`ri-${item.icon} `" />
+                  </button>
+                </div>
+              </div>
+              <div class="divider" />
+              <editor-content :editor="titleEditor" />
+              <editor-content class="mt-4" :editor="editor" />
+            </div>
+            <div class="card-actions justify-end mr-0">
+              <button 
+                class="btn-sm btn-primary rounded-lg" 
+                @click="saveNote"
+              >
+                <i class="ri-save-fill"></i>
+              </button>
+              <button 
+                class="btn-sm btn-error rounded-lg"
+                @click="resetNote"
+              >
+                <i class="ri-delete-bin-7-fill"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <div 
+        v-if="addNewTag"
+        class="absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        bg-gray-700 bg-opacity-50
+        z-10"
+      >
+        <div class="card-compact rounded-lg w-96 bg-neutral text-neutral-content">
+          <div class="card-body">
+            <div class="relative">
+              <h1 class="text-2xl">My Tags</h1>
+              <a 
+                class="btn btn-sm btn-circle absolute right-0 top-0" 
+                @click="addTag"
+              >
+                ✕
+              </a>
+            </div>
+            <div class="bg-gray-700 rounded p-4">
+              <div>
+                Add new tag:
+                <div class="mt-4">
+                  <input type="text" placeholder="Type here" class="input w-48 max-w-xs" /> 
+                  <button class="btn-sm btn-success rounded-lg ml-4"> Add </button>
+                </div>
+              </div>
+              <div class="divider"></div> 
+              <div>
+                My Notes
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <slot />
     </div>
-    <slot />
-  </div>
   </div>
 </template>
 
@@ -95,8 +133,10 @@ export default {
   },
   data() {
     const addNewNote = false
+    const addNewTag = false
     return {
       page:  "home",
+      addNewTag,
       addNewNote,
       tags: [],
       titleEditor: null,
@@ -276,6 +316,13 @@ export default {
         this.addNewNote = true
       } else {
         this.addNewNote = false
+      }
+    },
+    addTag() {
+      if (this.addNewTag == false) {
+        this.addNewTag = true
+      } else {
+        this.addNewTag = false
       }
     },
     async saveNote() {
