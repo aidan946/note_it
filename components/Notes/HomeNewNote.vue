@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import StarterKit from '@tiptap/starter-kit'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Heading from '@tiptap/extension-heading'
@@ -220,7 +219,6 @@ export default{
     this.editor = new Editor({
       content: "Body",
       extensions: [
-        StarterKit,
         Document,
         TaskList,
         TaskItem.configure({

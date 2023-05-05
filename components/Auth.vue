@@ -22,6 +22,7 @@
           type="password"
           placeholder="Your password"
         />
+        <br />
         <span>{{ error }}</span>
       </div>
       <div class="mt-2">
@@ -43,7 +44,7 @@
   </form>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     const loading = ref(false)
@@ -67,6 +68,7 @@ export default {
         password: this.password
       })
       if (error) {
+        console.log('Error message:', error.response.body.error_description)
         this.error = error
       } else {
         navigateTo('/notes/home')

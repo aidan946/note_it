@@ -47,7 +47,7 @@
               </a>
             </li>
             <li><a>Settings</a></li>
-            <li><a @click="logout()">Logout</a></li>
+            <li><a @click="logout">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -55,14 +55,15 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  methods: {
-    async  logout() {
-      const supabase = useSupabaseClient()
-      let { error } = await supabase.auth.signOut()
-      if (error) console.log(error) 
+<script lang="ts" setup>
+  async function logout() {
+    console.log("Hit")
+    const supabase = useSupabaseClient()
+    let { error } = await supabase.auth.signOut()
+    if (error) {
+      console.log(error) 
+    } else {
+     navigateTo('/')
     }
   }
-}
 </script>
