@@ -22,21 +22,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default{
   name: "MenuSideBar",
-  emits: ['navigatePage', 'addNote'],
+  emits: ['addNote'],
   data() {
     return {
       edit:false,
-      noteTitle: this.title,
-      noteTag: this.tag,
-      noteBody: this.body,
     }
   },
   methods: {
     submit() {
-      this.$emit('navigatePage')
       this.$emit('addNote')
     }
   }
