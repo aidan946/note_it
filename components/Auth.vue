@@ -3,10 +3,11 @@
     class="row flex-center flex"
     @submit.prevent="handleLogin"
   >
-    <div class="col-6 form-widget">
-      <h1 class="header">
-        Authentication
-      </h1>
+  <div class="ml-auto mr-auto">
+    <h1>Note-It!</h1>
+  </div>
+  <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
+    <div class="col-6 form-widget p-8 card shadow-2xl">
       <div>
         <input
           v-model="email"
@@ -37,6 +38,7 @@
           Sign Up
         </button>
       </div>
+    </div>
     </div>
   </form>
 </template>
