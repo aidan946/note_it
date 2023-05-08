@@ -155,7 +155,7 @@ export default{
     const loadModal = false
     return {
       loadModal,
-      tags: [],
+      tags: {},
       noteID: props.id,
       noteTitle: props.title,
       noteBody: props.body,
@@ -284,6 +284,24 @@ export default{
       ],
     }
   },
+  created() {
+    const supabase = useSupabaseClient()
+    useAsyncData('tags', async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      this.tags = []
+      if (user) {
+        const { data } = await supabase.from('note-tags').select('tag_id').eq('note_id', this.noteID)
+        if (data) {
+	  for (const i of data) {
+            let { data: databaseTags } = await supabase.from('tags').select('id, name, color').eq('id', i.tag_id)
+            if (databaseTags) {
+          	this.tags.push(databaseTags[0])
+	    }
+          }
+        }
+      }
+    })
+  },
   mounted() {
     this.titleEditor = new Editor({
       content: this.noteTitle,
@@ -322,14 +340,6 @@ export default{
         },
       },
     })
-
-    async () => {
-      const supabase = useSupabaseClient()
-      const { data } = await supabase.from('id, tags').select('name').eq('note_id', this.noteID)
-      if (data) {
-        tags.value = data  
-      }
-    }
   },
   beforeUnmount() {
     this.titleEditor.destroy()
