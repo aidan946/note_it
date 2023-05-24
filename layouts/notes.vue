@@ -313,8 +313,15 @@ export default {
         this.addNewTag = false
       }
     },
-    createNewTag() {
-
+    async createNewTag() {
+      const supabase = useSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data } = await supabase
+        .from('tags')
+        .insert([
+          { name: "", user_id: user.id },
+        ])
+        .select('id, name')
     },
     async deleteTag(id: number) {
       const supabase = useSupabaseClient()
