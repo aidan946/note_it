@@ -54,39 +54,7 @@
         justify-center
         bg-gray-700 bg-opacity-50
         z-10">
-        <div class="card-compact rounded-lg w-96 bg-neutral text-neutral-content">
-          <div class="card-body">
-            <div class="relative">
-              <h1 class="text-2xl">Tags</h1>
-              <a class="btn btn-sm btn-circle absolute right-0 top-0" @click="addTag">
-                ✕
-              </a>
-            </div>
-            <div class="bg-gray-700 rounded p-4">
-              <div>
-                Add new tag:
-                <div class="mt-4 flex justify-center">
-                  <input type="text" placeholder="Type here" class="input w-48 max-w-xs" />
-                  <button class="btn-sm btn-success rounded-lg ml-4 mt-2"> Add </button>
-                </div>
-              </div>
-              <div class="divider"></div>
-              <div class="pb-1">
-                My Tags:
-              </div>
-              <ul class="menu menu-compact" v-for="tag in this.tags" :key="tag.id">
-                <li>
-                  <div class="flex">
-                    <a>{{ tag.name }}</a>
-                    <button class="btn-sm btn-error rounded-lg mr-0 ml-auto" @click="">
-                      <i class="ri-delete-bin-7-fill"></i>
-                    </button>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <NotesTagModal @add-tag="addTag" />
       </div>
       <slot />
     </div>
