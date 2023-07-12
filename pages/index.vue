@@ -1,5 +1,5 @@
 <template>
-  <div data-theme="dark">
+  <div data-theme="night">
     <Auth />
   </div>
 </template>
@@ -25,4 +25,5 @@ html {
   margin: 0;
   width: 100%;
   min-height: 100vh;
-}</style>
+}
+</style>
