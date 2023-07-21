@@ -66,6 +66,9 @@ export default {
         .eq('id', id)
       let newDatabaseNotes = this.databaseNotes.filter(i => i.id != id)
       this.databaseNotes = newDatabaseNotes
+    },
+    async filterNotes(id) {
+
     }
   }
 }

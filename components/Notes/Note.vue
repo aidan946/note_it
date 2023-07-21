@@ -34,15 +34,21 @@
             <editor-content :editor="editor" />
           </div>
           <div class="flex space-x-2">
-            <div v-for="tag in tags" :key="tag.id">
-              <div class="badge badge-primary mt-4">
+            <div v-for="tag in noteTags" :key="tag.id">
+              <div class="badge badge-primary mt-4 p-3">
                 {{ tag.name }}
+                <button class="btn btn-circle btn-outline btn-xs ml-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
             </div>
             <select @change="addNoteTag(this.selectedValue)" v-modal="this.selectedValue"
-              class="select select-info select-xs w-24">
+              class="select select-info select-xs w-24 mt-4">
               <option disabled selected>Add Tag</option>
-              <option v-for="option in options" :key="option.id" :value="option.name">{{ option.name }}</option>
+              <option v-for="tag in noteTags" :key="tag.id" :value="tag.name">{{ tag.name }}</option>
             </select>
           </div>
           <div class="card-actions justify-end mr-0">
@@ -63,7 +69,7 @@
         </div>
         <editor-content :editor="editor" />
         <div class="flex space-x-2">
-          <div v-for="tag in tags" :key="tag.id">
+          <div v-for="tag in noteTags" :key="tag.id">
             <div class="badge badge-primary">
               {{ tag.name }}
             </div>
@@ -119,7 +125,8 @@ export default {
     return {
       selectedValue: '',
       loadModal,
-      tags: {},
+      noteTags: {},
+      selectTags: {},
       noteID: props.id,
       noteTitle: props.title,
       noteBody: props.body,
@@ -259,17 +266,19 @@ export default {
     const supabase = useSupabaseClient()
     useAsyncData('tags', async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      this.tags = []
+      this.noteTags = []
+      this.selectTags = []
       if (user) {
         const { data } = await supabase.from('note-tags').select('tag_id').eq('note_id', this.noteID)
         if (data) {
           for (const i of data) {
             let { data: databaseTags } = await supabase.from('tags').select('id, name, color').eq('id', i.tag_id)
             if (databaseTags) {
-              this.tags.push(databaseTags[0])
+              this.noteTags.push(databaseTags[0])
             }
           }
         }
+        const { data: userTags } = await supabase.from('tags').select('id, name')
       }
     })
   },

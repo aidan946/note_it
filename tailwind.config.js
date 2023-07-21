@@ -23,7 +23,7 @@ module.exports = {
     logs: true,
     rtl: false,
     prefix: "",
-    theme: "night",
+    themes: ["night"],
     darkTheme: "night",
   },
 }
