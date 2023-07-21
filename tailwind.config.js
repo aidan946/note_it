@@ -13,8 +13,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    require('@tailwindcss/line-clamp'),
-    require("@tailwindcss/typography"), 
+    require("@tailwindcss/typography"),
     require("daisyui")
   ],
   daisyui: {
@@ -24,7 +23,7 @@ module.exports = {
     logs: true,
     rtl: false,
     prefix: "",
-    theme: "night",
+    themes: ["night"],
     darkTheme: "night",
   },
 }

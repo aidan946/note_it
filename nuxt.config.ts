@@ -8,9 +8,9 @@ export default defineNuxtConfig({
     transpile:
       process.env.NODE_ENV === 'production'
         ? [
-            '@css-render/vue3-ssr',
-            '@juggle/resize-observer'
-          ]
+          '@css-render/vue3-ssr',
+          '@juggle/resize-observer'
+        ]
         : ['@juggle/resize-observer']
   },
   vite: {

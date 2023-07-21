@@ -1,81 +1,63 @@
 <template>
   <div>
     <HeaderBar />
-  <div class="flex w-screen">
-    <div class="min-w-64 w-64 max-w-64">
-      <NotesMenuSideBar 
-        @navigate-page="navigatePage"
-        @add-note="addNote"
-      />
-    </div>
-    <div 
-      v-if="addNewNote"
-      class="absolute
-      inset-0
-      flex
-      items-center
-      justify-center
-      bg-gray-700 bg-opacity-50
-      z-10"
-    >
-      <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
-        <div class="card-body">
-          <div class="relative">
-            <h1 class="text-2xl">Add New Note</h1>
-            <a 
-              class="btn btn-sm btn-circle absolute right-0 top-0" 
-              @click="addNote"
-            >
-              ✕
-            </a>
-          </div>
-          <div class="bg-gray-700 rounded p-4">
-            <div class="flex text-lg	h-8">
-              <div 
-                v-for="(item, index) in items" 
-                :key="item.icon"
-                class="p-1"
-              >
-                <div 
-                  v-if="item.type === 'divider'" 
-                  :key="`divider${index}`"
-                > 
-                  | 
-                </div>
-                <button
-                  class="menu-item"
-                  :class="{ 'is-active': item.isActive ? item.isActive(): null }"
-                  :title="item.title"
-
-                  @click="item.action"
-                >
-                  <i :class="`ri-${item.icon} `" />
-                </button>
-              </div>
+    <div class="flex w-screen">
+      <div class="min-w-64 w-64 max-w-64">
+        <NotesMenuSideBar @navigate-page="navigatePage" @add-note="addNote" @add-tag="addTag" />
+      </div>
+      <div v-if="addNewNote" class="absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        bg-gray-700 bg-opacity-50
+        z-10">
+        <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
+          <div class="card-body">
+            <div class="relative">
+              <h1 class="text-2xl">Add New Note</h1>
+              <a class="btn btn-sm btn-circle absolute right-0 top-0" @click="addNote">
+                ✕
+              </a>
             </div>
-            <div class="divider" />
-            <editor-content :editor="titleEditor" />
-            <editor-content class="mt-4" :editor="editor" />
-          </div>
-          <div class="card-actions justify-end mr-0">
-            <button 
-              class="btn-sm btn-primary rounded-lg" 
-              @click="saveNote"
-            >
-              <i class="ri-save-fill"></i>
-            </button>
-            <button 
-              class="btn-sm btn-error rounded-lg"
-              @click="resetNote"
-            >
-              <i class="ri-delete-bin-7-fill"></i>
-            </button>
+            <div class="bg-gray-700 rounded p-4">
+              <div class="flex text-lg	h-8">
+                <div v-for="(item, index) in items" :key="item.icon" class="p-1">
+                  <div v-if="item.type === 'divider'" :key="`divider${index}`">
+                    |
+                  </div>
+                  <button class="menu-item" :class="{ 'is-active': item.isActive ? item.isActive() : null }"
+                    :title="item.title" @click="item.action">
+                    <i :class="`ri-${item.icon} `" />
+                  </button>
+                </div>
+              </div>
+              <div class="divider" />
+              <editor-content :editor="titleEditor" />
+              <editor-content class="mt-4" :editor="editor" />
+            </div>
+            <div class="card-actions justify-end mr-0">
+              <button class="btn-sm btn-primary rounded-lg" @click="saveNote">
+                <i class="ri-save-fill"></i>
+              </button>
+              <button class="btn-sm btn-error rounded-lg" @click="resetNote">
+                <i class="ri-delete-bin-7-fill"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <div v-if="addNewTag" class="absolute
+        inset-0
+        flex
+        items-center
+        justify-center
+        bg-gray-700 bg-opacity-50
+        z-10">
+        <NotesTagModal @add-tag="addTag" />
+      </div>
+      <slot />
     </div>
-    <slot />
-  </div>
   </div>
 </template>
 
@@ -95,10 +77,12 @@ export default {
   },
   data() {
     const addNewNote = false
+    const addNewTag = false
     return {
-      page:  "home",
+      page: "home",
+      addNewTag,
       addNewNote,
-      tags: [],
+      tags: {},
       titleEditor: null,
       editor: null,
       items: [
@@ -267,8 +251,20 @@ export default {
     this.titleEditor.destroy()
     this.editor.destroy()
   },
+  created() {
+    const supabase = useSupabaseClient()
+    useAsyncData('tags', async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('tags').select('id, name').eq('user_id', user.id)
+        if (data) {
+          this.tags = data
+        }
+      }
+    })
+  },
   methods: {
-    navigatePage(page: string){
+    navigatePage(page: string) {
       this.page = page
     },
     addNote() {
@@ -278,15 +274,42 @@ export default {
         this.addNewNote = false
       }
     },
-    async saveNote() {
-      const supabase = useSupabaseClient()  
+    addTag() {
+      if (this.addNewTag == false) {
+        this.addNewTag = true
+      } else {
+        this.addNewTag = false
+      }
+    },
+    async createNewTag() {
+      const supabase = useSupabaseClient()
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
-      .from('notes')
-      .insert([
-        { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
-      ])
-      .select('id, title, body')
+        .from('tags')
+        .insert([
+          { name: "", user_id: user.id },
+        ])
+        .select('id, name')
+    },
+    async deleteTag(id: number) {
+      const supabase = useSupabaseClient()
+      await supabase
+        .from('tags')
+        .delete()
+        .eq('id', id)
+      let newDatabaseTags = this.tags.filter((i: { id: number }) => i.id != id)
+      this.tags = newDatabaseTags
+
+    },
+    async saveNote() {
+      const supabase = useSupabaseClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data } = await supabase
+        .from('notes')
+        .insert([
+          { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
+        ])
+        .select('id, title, body')
       this.titleEditor.chain().focus().setContent("Title").run()
       this.editor.chain().focus().setContent("Body").run()
     },
