@@ -1,45 +1,27 @@
 <template>
-  <form
-    class="row flex-center flex"
-    @submit.prevent="handleLogin"
-  >
-  <div class="ml-auto mr-auto">
-    <h1>Note-It!</h1>
-  </div>
-  <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
-    <div class="col-6 form-widget p-8 card shadow-2xl">
-      <div>
-        <input
-          v-model="email"
-          class="input input-bordered w-full max-w-xs"
-          type="email"
-          placeholder="Your email"
-        />
-        <br />
-        <input
-          v-model="password"
-          class="input input-bordered w-full max-w-xs"
-          type="password"
-          placeholder="Your password"
-        />
-        <br />
-        <span>{{ error }}</span>
-      </div>
-      <div class="mt-2">
-        <button 
-          class="btn btn-primary"
-          @click="login"
-        >
-          Login
-        </button>
-        <button 
-          class="btn btn-outline btn-primary ml-2"
-          @click="signup()"
-        >
-          Sign Up
-        </button>
-      </div>
+  <form class="row flex-center flex" @submit.prevent="handleLogin">
+    <div class="ml-auto mr-auto">
+      <h1>Note-It!</h1>
     </div>
+    <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
+      <div class="col-6 form-widget p-8 card shadow-2xl">
+        <div>
+          <input v-model="email" class="input input-bordered w-full max-w-xs" type="email" placeholder="Your email" />
+          <br />
+          <input v-model="password" class="input input-bordered w-full max-w-xs" type="password"
+            placeholder="Your password" />
+          <br />
+          <span>{{ error }}</span>
+        </div>
+        <div class="mt-2">
+          <button class="btn btn-primary" @click="login">
+            Login
+          </button>
+          <button class="btn btn-outline btn-primary ml-2" @click="signup()">
+            Sign Up
+          </button>
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -58,7 +40,7 @@ export default {
       password,
       error
     }
-  }, 
+  },
   methods: {
     async login() {
       console.log("Logged")
@@ -75,7 +57,7 @@ export default {
       }
 
     },
-    async  signup() {
+    async signup() {
       console.log("Signup")
       const supabase = useSupabaseClient()
       let { data, error } = await supabase.auth.signUp({
