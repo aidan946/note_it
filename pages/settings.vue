@@ -1,6 +1,9 @@
 <template>
   <HeaderBar />
   <div>
-    <h1>Test</h1>
+    <div class="border">test</div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 </template>
