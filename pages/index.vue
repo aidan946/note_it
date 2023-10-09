@@ -1,5 +1,5 @@
 <template>
-  <div data-theme="night">
+  <div class="w-screen" data-theme="night">
     <Auth />
   </div>
 </template>

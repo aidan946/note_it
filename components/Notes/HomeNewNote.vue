@@ -1,30 +1,14 @@
 <template>
-  <div 
-    v-if="editor"
-    class="editor border rounded-lg"
-  >
-    <div 
-      class="card-compact rounded-lg bg-neutral text-neutral-content"
-    >
+  <div v-if="editor" class="editor border rounded-lg">
+    <div class="card-compact rounded-lg bg-neutral text-neutral-content">
       <div class="card-body">
         <div class="flex text-lg h-8">
-          <div 
-            v-for="(item, index) in items" 
-            :key="item.icon"
-            class="p-1"
-          >
-            <div 
-              v-if="item.type === 'divider'" 
-              :key="`divider${index}`"
-            > 
-              | 
+          <div v-for="(item, index) in items" :key="item.icon" class="p-1">
+            <div v-if="item.type === 'divider'" :key="`divider${index}`">
+              |
             </div>
-            <button
-              class="menu-item"
-              :class="{ 'is-active': item.isActive ? item.isActive(): null }"
-              :title="item.title"
-              @click="item.action"
-            >
+            <button class="menu-item" :class="{ 'is-active': item.isActive ? item.isActive() : null }" :title="item.title"
+              @click="item.action">
               <i :class="`ri-${item.icon} `" />
             </button>
           </div>
@@ -36,16 +20,10 @@
         <div class="flex space-x-2">
         </div>
         <div class="card-actions justify-end mr-0">
-          <button 
-            class="btn-sm btn-primary rounded-lg" 
-            @click="saveNote"
-          >
+          <button class="btn-sm btn-primary rounded-lg" @click="saveNote">
             <i class="ri-save-fill"></i>
           </button>
-          <button 
-            class="btn-sm btn-error rounded-lg"
-            @click="resetNote"
-          >
+          <button class="btn-sm btn-error rounded-lg" @click="resetNote">
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
@@ -63,7 +41,7 @@ import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import 'remixicon/fonts/remixicon.css'
-export default{
+export default {
   name: "HomeNote",
   components: {
     EditorContent,
@@ -243,14 +221,14 @@ export default{
   },
   methods: {
     async saveNote() {
-      const supabase = useSupabaseClient()  
+      const supabase = useSupabaseClient()
       const { data: { user } } = await supabase.auth.getUser()
       const { data } = await supabase
-      .from('notes')
-      .insert([
-        { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
-      ])
-      .select('id, title, body')
+        .from('notes')
+        .insert([
+          { title: this.titleEditor.getHTML(), body: this.editor.getHTML(), user_id: user.id },
+        ])
+        .select('id, title, body')
       this.titleEditor.chain().focus().setContent("Title").run()
       this.editor.chain().focus().setContent("Body").run()
     },
@@ -263,39 +241,44 @@ export default{
 </script>
 
 <style lang="scss">
-  body{
-    max-width: 30rem;
-  }
-  .centre-buttons{
-    text-align: center;
-  }
-  .centre-buttons button{
+body {
+  max-width: 30rem;
+}
+
+.centre-buttons {
+  text-align: center;
+}
+
+.centre-buttons button {
   margin: 1rem;
-  }
-  ul[data-type="taskList"] {
-    list-style: none;
-    padding: 0;
+}
 
-    p {
-      margin: 0;
+ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+
+  p {
+    margin: 0;
+  }
+
+  li {
+    display: flex;
+
+    >label {
+      flex: 0 0 auto;
+      margin-right: 0.5rem;
+      user-select: none;
     }
 
-    li {
-      display: flex;
-
-      > label {
-        flex: 0 0 auto;
-        margin-right: 0.5rem;
-        user-select: none;
-      }
-
-      > div {
-        flex: 1 1 auto;
-      }
+    >div {
+      flex: 1 1 auto;
     }
   }
-  .menu-item {
-    border-radius: 0.4rem;
+}
+
+.menu-item {
+  border-radius: 0.4rem;
+
   &.is-active,
   &:hover {
     color: #0D0D0D;
