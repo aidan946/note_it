@@ -20,7 +20,7 @@
         <div class="pb-1">
           My Tags:
         </div>
-        <ul class="menu menu-compact" v-for="tag in this.tags" :key="tag.id">
+        <ul class="menu menu-sm" v-for="tag in this.tags" :key="tag.id">
           <li>
             <div class="flex">
               <a>{{ tag.name }}</a>
@@ -79,12 +79,18 @@ export default {
     },
     async deleteTag(id: number) {
       const supabase = useSupabaseClient()
+
+      let { data: note_tags, error } = await supabase
+        .from('note-tags')
+        .select('id')
+        .eq('tag_id', id)
       await supabase
         .from('tags')
         .delete()
-        .eq('id', id)
-      let newDatabaseTags = this.tags.filter((i: { id: number }) => i.id != id)
-      this.tags = newDatabaseTags
+        .eq('id', note_tags.id)
+      console.log(note_tags)
+      //let newDatabaseTags = this.tags.filter((i: { id: number }) => i.id != id)
+      //this.tags = newDatabaseTags
 
     },
   }
