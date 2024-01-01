@@ -35,9 +35,9 @@
           </div>
           <div class="flex space-x-2">
             <div v-for="tag in noteTags" :key="tag.id">
-              <div class="badge badge-primary mt-4 p-3">
+              <div class="group badge badge-primary mt-4 p-3">
                 {{ tag.name }}
-                <button class="btn btn-circle btn-outline btn-xs ml-1">
+                <button class="hidden group-hover:flex btn btn-circle btn-outline btn-xs btn-error ml-1">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -52,10 +52,10 @@
             </select>
           </div>
           <div class="card-actions justify-end mr-0">
-            <button class="btn-sm btn-primary rounded-lg" @click="submitEdit">
+            <button class="btn btn-sm btn-primary rounded-lg" @click="submitEdit">
               <i class="ri-save-fill"></i>
             </button>
-            <button class="btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
+            <button class="btn btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
               <i class="ri-delete-bin-7-fill"></i>
             </button>
           </div>
@@ -76,13 +76,13 @@
           </div>
         </div>
         <div class="card-actions justify-end mr-0">
-          <button class="btn-sm btn-success rounded-lg" @click="toggleModal">
+          <button class="btn btn-sm btn-success rounded-lg" @click="toggleModal">
             <i class="ri-edit-box-fill"></i>
           </button>
-          <button class="btn-sm btn-primary rounded-lg" @click="submitEdit">
+          <button class="btn btn-sm btn-primary rounded-lg" @click="submitEdit">
             <i class="ri-save-fill"></i>
           </button>
-          <button class="btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
+          <button class="btn btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
