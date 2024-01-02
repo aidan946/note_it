@@ -1,14 +1,74 @@
 <template>
   <div class="w-screen" data-theme="night">
-    <Auth />
+    <form class="row flex-center flex" @submit.prevent="handleLogin">
+      <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
+        <div class="card bg-neutral shadow-2xl p-24 mr-32">
+          <h1 class="font-mono text-8xl">Note-It!</h1>
+        </div>
+        <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
+          <div class="form-widget card bg-neutral shadow-2xl">
+            <div class="card-body">
+              <input v-model="email" class="input input-bordered w-full max-w-xs" type="email" placeholder="Your email" />
+              <br />
+              <input v-model="password" class="input input-bordered w-full max-w-xs" type="password"
+                placeholder="Your password" />
+              <br />
+              <span class="text-error">{{ supabaseError }}</span>
+
+              <div class="card-actions">
+                <button class="btn btn-primary" @click="login">
+                  Login
+                </button>
+                <button class="btn btn-outline btn-primary ml-2" @click="signup()">
+                  Sign Up
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
-<script setup>
-const supabase = useSupabaseClient()
-const { data: { user } } = await supabase.auth.getUser()
+<script setup lang='ts'>
+const client = useSupabaseClient()
+const user = useSupabaseUser()
 
-if (user) navigateTo('/notes/home')
+if (user.value) navigateTo('/notes/home')
+
+const email = ref('')
+const password = ref('')
+let supabaseError = ref('')
+
+async function login() {
+  try {
+    const { error } = await client.auth.signInWithPassword({
+      email: email.value,
+      password: password.value
+    })
+    if (error) {
+      supabaseError.value = error.error_description || error.message
+    } else {
+      navigateTo('/notes/home')
+    }
+  } catch (error) {
+    supabaseError.value = error.error_description || error.message
+  }
+
+}
+async function signup() {
+  try {
+    const { error } = await client.auth.signUp({
+      email: email.value,
+      password: password.value
+    })
+    if (error) throw error
+  } catch (error) {
+    supabaseError.value = error.error_description || error.message
+  }
+
+}
 </script>
 
 <style>

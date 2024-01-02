@@ -18,6 +18,15 @@ export default defineNuxtConfig({
     optimizeDeps: {
     }
   },
+  supabase: {
+    redirect: true,
+    redirectOptions: {
+      login: '/',
+      callback: '/confirm',
+      exclude: [],
+    },
+  },
+
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {

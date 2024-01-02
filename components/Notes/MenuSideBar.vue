@@ -28,34 +28,19 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "MenuSideBar",
-  emits: ['addNote', 'addTag', 'filterNotes'],
-  data() {
-    return {
-      edit: false,
-      tags: {},
-    }
-  },
-  created() {
-    const supabase = useSupabaseClient()
-    useAsyncData('tags', async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data } = await supabase.from('tags').select('id, name').eq('user_id', user.id)
-        if (data) {
-          this.tags = data
-        }
-      }
-    })
-  },
-  methods: {
-    submit() {
-      this.$emit('addNote')
-      this.$emit('addTag')
-      this.$emit('filterNotes')
+<script setup lang="ts">
+const client = useSupabaseClient()
+const user = useSupabaseUser()
+
+defineEmits(['addNote', 'addTag', 'filterNotes'])
+let edit = ref(false)
+
+const { data: tags } = await useAsyncData('tags', async () => {
+  if (user.value) {
+    const { data } = await client.from('tags').select('id, name').eq('user_id', user.value.id)
+    if (data) {
+      return data
     }
   }
-}
+})
 </script>

@@ -34,10 +34,10 @@
 </template>
 
 <script lang="ts" setup>
+const client = useSupabaseClient()
+
 async function logout() {
-  console.log("Hit")
-  const supabase = useSupabaseClient()
-  let { error } = await supabase.auth.signOut()
+  let { error } = await client.auth.signOut()
   if (error) {
     console.log(error)
   } else {

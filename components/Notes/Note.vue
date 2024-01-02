@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-setup-props-destructure -->
 <template>
   <div>
     <div v-if="loadModal" class="
@@ -99,7 +98,6 @@ import Text from '@tiptap/extension-text'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import 'remixicon/fonts/remixicon.css'
 export default {
   name: "Note",
   components: {
