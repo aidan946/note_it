@@ -33,7 +33,6 @@ const client = useSupabaseClient()
 const user = useSupabaseUser()
 
 defineEmits(['addNote', 'addTag', 'filterNotes'])
-let edit = ref(false)
 
 const { data: tags } = await useAsyncData('tags', async () => {
   if (user.value) {

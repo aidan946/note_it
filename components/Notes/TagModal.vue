@@ -12,8 +12,8 @@
           Add new tag:
           <div class="mt-4 flex justify-center">
             <input type="text" v-model="tagName" placeholder="Type here" class="input w-48 max-w-xs"
-              @keyup.enter="createNewTag(this.tagName)" />
-            <button class="btn btn-sm btn-success rounded-lg ml-4 mt-2" @click="createNewTag(this.tagName)"> Add </button>
+              @keyup.enter="createNewTag(tagName)" />
+            <button class="btn btn-sm btn-success rounded-lg ml-4 mt-2" @click="createNewTag(tagName)"> Add </button>
           </div>
         </div>
         <div class="divider"></div>
@@ -38,9 +38,10 @@
 <script setup lang="ts">
 const client = useSupabaseClient()
 const user = useSupabaseUser()
+const tagName = ref('')
 
 const { data: tags } = await useAsyncData('tags', async () => {
-  if (user) {
+  if (user && user.value) {
     const { data } = await client.from('tags').select('id, name').eq('user_id', user.value.id)
     if (data) {
       return data
@@ -49,26 +50,28 @@ const { data: tags } = await useAsyncData('tags', async () => {
 })
 
 async function createNewTag(name: string) {
-  if (user) {
+  if (user && user.value) {
     const { data } = await client
       .from('tags')
       .insert([
         { name: name, user_id: user.value.id },
       ])
       .select('id, name')
-    if (data) {
+    if (data && tags.value) {
       tags.value.push(data[0])
     }
   }
 }
 
 async function deleteTag(id: number) {
-  await client
-    .from('tags')
-    .delete()
-    .eq('id', id)
-  let newTags = tags.value.filter(i => i.id != id)
-  tags.value = newTags
+  if (tags.value) {
+    await client
+      .from('tags')
+      .delete()
+      .eq('id', id)
+    let newTags = tags.value.filter(i => i.id != id)
+    tags.value = newTags
+  }
 }
 </script>
 

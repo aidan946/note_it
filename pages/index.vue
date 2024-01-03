@@ -1,6 +1,6 @@
 <template>
   <div class="w-screen" data-theme="night">
-    <form class="row flex-center flex" @submit.prevent="handleLogin">
+    <form class="row flex-center flex">
       <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
         <div class="card bg-neutral shadow-2xl p-24 mr-32">
           <h1 class="font-mono text-8xl">Note-It!</h1>
@@ -48,11 +48,11 @@ async function login() {
       password: password.value
     })
     if (error) {
-      supabaseError.value = error.error_description || error.message
+      supabaseError.value = error.message
     } else {
       navigateTo('/notes/home')
     }
-  } catch (error) {
+  } catch (error: any) {
     supabaseError.value = error.error_description || error.message
   }
 
@@ -64,7 +64,7 @@ async function signup() {
       password: password.value
     })
     if (error) throw error
-  } catch (error) {
+  } catch (error: any) {
     supabaseError.value = error.error_description || error.message
   }
 
