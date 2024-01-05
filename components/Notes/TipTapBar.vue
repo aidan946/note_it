@@ -14,6 +14,7 @@
 
 <script setup lang='ts'>
 const props = defineProps({ editor: { type: Object, required: true } })
+debugger
 console.log(props.editor)
 
 let editor = ref(props.editor)

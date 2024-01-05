@@ -16,5 +16,8 @@
 </template>
 
 <script setup lang="ts">
-
+definePageMeta({
+  layout: 'kanban',
+  middleware: 'auth'
+})
 </script>

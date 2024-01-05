@@ -2,6 +2,7 @@
   <div class="editor border rounded-lg">
     <div class="card-compact rounded-lg bg-neutral text-neutral-content">
       <div class="card-body">
+
         <div class="flex mt-3">
           <editor-content :editor="titleEditor" />
         </div>
@@ -50,7 +51,7 @@ const titleEditor = ref(useEditor({
     },
   },
 }))
-const editor = ref(useEditor({
+const editor = useEditor({
   content: "Body",
   extensions: [
     Document,
@@ -69,7 +70,9 @@ const editor = ref(useEditor({
       class: 'prose focus:outline-none pb-2',
     },
   },
-}))
+})
+
+console.log(editor)
 
 async function saveNote() {
   const { data } = await client

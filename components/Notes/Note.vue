@@ -26,7 +26,8 @@
             <div v-for="tag in tags" :key="tag.id">
               <div class="group badge badge-primary mt-4 p-3">
                 {{ tag.name }}
-                <button class="hidden group-hover:flex btn btn-circle btn-outline btn-xs btn-error ml-1">
+                <button @click="deleteNoteTag(tag.id)"
+                  class="hidden group-hover:flex btn btn-circle btn-outline btn-xs btn-error ml-1">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -34,10 +35,10 @@
                 </button>
               </div>
             </div>
-            <select @change="addNoteTag(selectedValue)" v-modal="selectedValue"
-              class="select select-info select-xs w-24 mt-4">
-              <option disabled selected>Add Tag</option>
-              <option v-for="tag in tags" :key="tag.id" :value="tag.name">{{ tag.name }}</option>
+            <select @change="addNoteTag($event)" v-model="selectedTag" class="select select-info select-xs w-24 mt-4">
+              <option :key="'default'" disabled selected>Add Tag</option>
+              <option v-for=" tag  in  otherTags " :key="tag.id" :value="tag.id">{{ tag.name }}
+              </option>
             </select>
           </div>
           <div class="card-actions justify-end mr-0">
@@ -58,7 +59,7 @@
         </div>
         <editor-content :editor="editor" />
         <div class="flex space-x-2">
-          <div v-for="tag in tags" :key="tag.id">
+          <div v-for=" tag  in  tags " :key="tag.id">
             <div class="badge badge-primary">
               {{ tag.name }}
             </div>
@@ -109,26 +110,21 @@ const props = defineProps({
 defineEmits(['deleteNote'])
 
 const loadModal = ref(false)
-let selectedValue = ''
+let selectedTag = ref('Add Tag')
 const noteID = props.id
 let noteTitle = props.title
 let noteBody = props.body
-let tags: { id: number; name: string; color: string }[] = []
 
-
-await useAsyncData('tags', async () => {
-  if (user) {
-    const { data: noteTags } = await client.from('note-tags').select('tag_id').eq('note_id', noteID)
-    if (noteTags) {
-      for (const i of noteTags) {
-        let { data: databaseTags } = await client.from('tags').select('id, name, color').eq('id', i.tag_id)
-        if (databaseTags) {
-          tags.push(databaseTags[0])
-        }
-      }
-    }
-  }
-})
+let { data: noteTags } = await client.from('note-tags').select('tags(id, name, color)').eq('note_id', noteID)
+if (noteTags) {
+  noteTags = noteTags.map(function (tag) {
+    return tag['tags']
+  })
+}
+const tagFilter = '(' + noteTags.map(tag => tag.id).join(',') + ')';
+let { data: allTags } = await client.from('tags').select('id, name, color').not('id', 'in', tagFilter)
+let tags = ref(noteTags)
+let otherTags = ref(allTags)
 
 const titleEditor = ref(useEditor({
   content: noteTitle,
@@ -170,13 +166,11 @@ const editor = ref(useEditor({
 }))
 
 function toggleModal() {
-
   loadModal.value = !loadModal.value
-
 }
 
 async function submitEdit() {
-  if (editor.value) {
+  if (titleEditor.value && editor.value) {
     const supabase = useSupabaseClient()
     await supabase
       .from('notes')
@@ -185,8 +179,24 @@ async function submitEdit() {
   }
   // Flash success here
 }
-async function addNoteTag(value: String) {
-  console.log(selectedValue)
+async function addNoteTag(event: any) {
+  let tag_id: number = parseInt(event.target.value)
+  const { data } = await client
+    .from('note-tags')
+    .insert([
+      { note_id: noteID, tag_id: tag_id },
+    ])
+  tags.value.push(otherTags.value.find(tag => tag.id === tag_id))
+  otherTags.value = otherTags.value.filter(i => i.id != tag_id)
+  selectedTag.value = 'default'
+}
+
+
+async function deleteNoteTag(tagID: number) {
+  let { error } = await client.from('note-tags').delete().match({ 'note_id': noteID, 'tag_id': tagID })
+  otherTags.value.push(tags.value.find(tag => tag.id === tagID))
+  tags.value = tags.value.filter(i => i.id != tagID)
+  if (error) console.log(error)
 }
 </script>
 

@@ -20,7 +20,7 @@
         <div class="pb-1">
           My Tags:
         </div>
-        <ul class="menu menu-sm" v-for="tag in tags" :key="tag.id">
+        <ul class="menu menu-sm" v-for="tag in allModalTags" :key="tag.id">
           <li>
             <div class="flex">
               <a>{{ tag.name }}</a>
@@ -40,7 +40,7 @@ const client = useSupabaseClient()
 const user = useSupabaseUser()
 const tagName = ref('')
 
-const { data: tags } = await useAsyncData('tags', async () => {
+const { data: allModalTags } = await useAsyncData('tags', async () => {
   if (user && user.value) {
     const { data } = await client.from('tags').select('id, name').eq('user_id', user.value.id)
     if (data) {
@@ -57,20 +57,20 @@ async function createNewTag(name: string) {
         { name: name, user_id: user.value.id },
       ])
       .select('id, name')
-    if (data && tags.value) {
-      tags.value.push(data[0])
+    if (data && allModalTags.value) {
+      allModalTags.value.push(data[0])
     }
   }
 }
 
 async function deleteTag(id: number) {
-  if (tags.value) {
+  if (allModalTags.value) {
     await client
       .from('tags')
       .delete()
       .eq('id', id)
-    let newTags = tags.value.filter(i => i.id != id)
-    tags.value = newTags
+    let newTags = allModalTags.value.filter(i => i.id != id)
+    allModalTags.value = newTags
   }
 }
 </script>

@@ -20,7 +20,7 @@
         <li class="flex">
           <a>My Tags: <button class="btn btn-ghost btn-circle avatar" @click="$emit('addTag')">+</button></a>
         </li>
-        <li class="flex" v-for="tag in tags" :key="tag.id">
+        <li class="flex" v-for="tag in allTags" :key="tag.id">
           <a @click="$emit('filterNotes', tag.id)">{{ tag.name }}</a>
         </li>
       </div>
@@ -34,7 +34,7 @@ const user = useSupabaseUser()
 
 defineEmits(['addNote', 'addTag', 'filterNotes'])
 
-const { data: tags } = await useAsyncData('tags', async () => {
+const { data: allTags } = await useAsyncData('tags', async () => {
   if (user.value) {
     const { data } = await client.from('tags').select('id, name').eq('user_id', user.value.id)
     if (data) {
