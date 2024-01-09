@@ -48,6 +48,7 @@
     "sass": "^1.69.7",
     "typescript": "^5.3.3",
     "vue": "^3.4.3",
+    "vue-draggable-plus": "^0.3.4",
     "vuedraggable": "^4.1.0"
   }
 }

@@ -12,7 +12,6 @@ const user = useSupabaseUser()
 
 definePageMeta({
   layout: 'notes',
-  middleware: 'auth'
 })
 
 let { data: databaseNotes } = await useAsyncData('databaseNotes', async () => {

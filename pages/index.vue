@@ -47,12 +47,14 @@ async function login() {
       email: email.value,
       password: password.value
     })
+    debugger
     if (error) {
       supabaseError.value = error.message
     } else {
       navigateTo('/notes/home')
     }
   } catch (error: any) {
+    console.log(error)
     supabaseError.value = error.error_description || error.message
   }
 

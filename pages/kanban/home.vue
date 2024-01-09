@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: 'kanban',
-  middleware: 'auth'
+  layout: 'kanban'
 })
 </script>
