@@ -2,8 +2,13 @@
   <div class="card-compact rounded-lg w-96 bg-neutral text-neutral-content">
     <div class="card-body">
       <div class="relative">
-        <h1 class="text-2xl">Tags</h1>
-        <a class="btn btn-sm btn-circle absolute right-0 top-0" @click="$emit('addTag')">
+        <h1 class="text-2xl">
+          Tags
+        </h1>
+        <a
+          class="btn btn-sm btn-circle absolute right-0 top-0"
+          @click="$emit('addTag')"
+        >
           ✕
         </a>
       </div>
@@ -11,20 +16,37 @@
         <div>
           Add new tag:
           <div class="mt-4 flex justify-center">
-            <input type="text" v-model="tagName" placeholder="Type here" class="input w-48 max-w-xs"
-              @keyup.enter="createNewTag(tagName)" />
-            <button class="btn btn-sm btn-success rounded-lg ml-4 mt-2" @click="createNewTag(tagName)"> Add </button>
+            <input
+              v-model="tagName"
+              type="text"
+              placeholder="Type here"
+              class="input w-48 max-w-xs"
+              @keyup.enter="createNewTag(tagName)"
+            />
+            <button
+              class="btn btn-sm btn-success rounded-lg ml-4 mt-2"
+              @click="createNewTag(tagName)"
+            >
+              Add
+            </button>
           </div>
         </div>
         <div class="divider"></div>
         <div class="pb-1">
           My Tags:
         </div>
-        <ul class="menu menu-sm" v-for="tag in allModalTags" :key="tag.id">
+        <ul
+          v-for="tag in allModalTags"
+          :key="tag.id"
+          class="menu menu-sm"
+        >
           <li>
             <div class="flex">
               <a>{{ tag.name }}</a>
-              <button class="btn btn-sm btn-error rounded-lg mr-0 ml-auto" @click="deleteTag(tag.id)">
+              <button
+                class="btn btn-sm btn-error rounded-lg mr-0 ml-auto"
+                @click="deleteTag(tag.id)"
+              >
                 <i class="ri-delete-bin-7-fill"></i>
               </button>
             </div>

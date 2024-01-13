@@ -2,7 +2,6 @@
   <div class="editor border rounded-lg">
     <div class="card-compact rounded-lg bg-neutral text-neutral-content">
       <div class="card-body">
-
         <div class="flex mt-3">
           <editor-content :editor="titleEditor" />
         </div>
@@ -10,10 +9,16 @@
         <div class="flex space-x-2">
         </div>
         <div class="card-actions justify-end mr-0">
-          <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
+          <button
+            class="btn btn-sm btn-primary rounded-lg"
+            @click="saveNote"
+          >
             <i class="ri-save-fill"></i>
           </button>
-          <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
+          <button
+            class="btn btn-sm btn-error rounded-lg"
+            @click="resetNote"
+          >
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>

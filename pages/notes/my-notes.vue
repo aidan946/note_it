@@ -1,7 +1,17 @@
 <template>
   <div class="flex flex-wrap justify-center overflow-auto max-h-full">
-    <div v-for="note in databaseNotes" :key="note.id" class="m-2">
-      <NotesNote :id="note.id" class="mt-2" :title="note.title" :body="note.body" @delete-note="deleteNote" />
+    <div
+      v-for="note in databaseNotes"
+      :key="note.id"
+      class="m-2"
+    >
+      <NotesNote
+        :id="note.id"
+        class="mt-2"
+        :title="note.title"
+        :body="note.body"
+        @delete-note="deleteNote"
+      />
     </div>
   </div>
 </template>

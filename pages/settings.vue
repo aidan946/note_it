@@ -1,31 +1,24 @@
 <template>
-  <HeaderBar />
   <div>
-    <form v-if="user" class="form-widget" @submit.prevent="updateProfile">
-      <div>
-        <label for="email">Email</label>
-        <input id="email" type="text" :value="user.email" disabled />
+    <HeaderBar />
+    <div class="w-screen mt-2">
+      <div class="card w-96 bg-neutral text-neutral-content">
+        <div class="card-body items-center text-center">
+          <h2 class="card-title">
+            Cookies!
+          </h2>
+          <p>We are using cookies for no reason.</p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary">
+              Accept
+            </button>
+            <button class="btn btn-ghost">
+              Deny
+            </button>
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="username">Username</label>
-        <input id="username" v-model="username" type="text" />
-      </div>
-      <div>
-        <label for="website">Website</label>
-        <input id="website" v-model="website" type="website" />
-      </div>
-
-      <div>
-        <input type="submit" class="button primary block" :value="loading ? 'Loading ...' : 'Update'"
-          :disabled="loading" />
-      </div>
-
-      <div>
-        <button class="button block" :disabled="loading" @click="signOut">
-          Sign Out
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </template>
 

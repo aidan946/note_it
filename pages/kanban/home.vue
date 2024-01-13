@@ -1,9 +1,13 @@
 <template>
-  <HeaderBar />
-  <div class="w-screen mt-2">
+  <div>
     <div class="w-3/4 h-3/4 ml-auto mr-auto mb-4">
       <select class="select select-bordered w-full max-w-xs">
-        <option disabled selected>Pick your favorite language</option>
+        <option
+          disabled
+          selected
+        >
+          Pick your favorite language
+        </option>
         <option>Java</option>
         <option>Go</option>
         <option>C</option>

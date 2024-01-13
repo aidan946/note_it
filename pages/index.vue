@@ -1,25 +1,45 @@
 <template>
-  <div class="w-screen" data-theme="night">
+  <div
+    class="w-screen"
+    data-theme="night"
+  >
     <form class="row flex-center flex">
       <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
         <div class="card bg-neutral shadow-2xl p-24 mr-32">
-          <h1 class="font-mono text-8xl">Note-It!</h1>
+          <h1 class="font-mono text-8xl">
+            Note-It!
+          </h1>
         </div>
         <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
           <div class="form-widget card bg-neutral shadow-2xl">
             <div class="card-body">
-              <input v-model="email" class="input input-bordered w-full max-w-xs" type="email" placeholder="Your email" />
+              <input
+                v-model="email"
+                class="input input-bordered w-full max-w-xs"
+                type="email"
+                placeholder="Your email"
+              />
               <br />
-              <input v-model="password" class="input input-bordered w-full max-w-xs" type="password"
-                placeholder="Your password" />
+              <input
+                v-model="password"
+                class="input input-bordered w-full max-w-xs"
+                type="password"
+                placeholder="Your password"
+              />
               <br />
               <span class="text-error">{{ supabaseError }}</span>
 
               <div class="card-actions">
-                <button class="btn btn-primary" @click="login">
+                <button
+                  class="btn btn-primary"
+                  @click="login"
+                >
                   Login
                 </button>
-                <button class="btn btn-outline btn-primary ml-2" @click="signup()">
+                <button
+                  class="btn btn-outline btn-primary ml-2"
+                  @click="signup()"
+                >
                   Sign Up
                 </button>
               </div>
@@ -47,7 +67,6 @@ async function login() {
       email: email.value,
       password: password.value
     })
-    debugger
     if (error) {
       supabaseError.value = error.message
     } else {

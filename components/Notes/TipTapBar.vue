@@ -1,11 +1,22 @@
 <template>
   <div class="flex text-lg h-8">
-    <div v-for="(item, index) in items" :key="item.icon" class="p-1">
-      <div v-if="item.type === 'divider'" :key="`divider${index}`">
+    <div
+      v-for="(item, index) in items"
+      :key="item.icon"
+      class="p-1"
+    >
+      <div
+        v-if="item.type === 'divider'"
+        :key="`divider${index}`"
+      >
         |
       </div>
-      <button class="menu-item" :class="{ 'is-active': item.isActive ? item.isActive() : null }" :title="item.title"
-        @click="item.action">
+      <button
+        class="menu-item"
+        :class="{ 'is-active': item.isActive ? item.isActive() : null }"
+        :title="item.title"
+        @click="item.action"
+      >
         <i :class="`ri-${item.icon} `" />
       </button>
     </div>
@@ -14,7 +25,6 @@
 
 <script setup lang='ts'>
 const props = defineProps({ editor: { type: Object, required: true } })
-debugger
 console.log(props.editor)
 
 let editor = ref(props.editor)

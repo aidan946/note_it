@@ -3,20 +3,31 @@
     <HeaderBar />
     <div class="flex w-screen">
       <div class="min-w-64 w-64 max-w-64">
-        <NotesMenuSideBar @add-note="addNote" @add-tag="addTag" />
+        <NotesMenuSideBar
+          @add-note="addNote"
+          @add-tag="addTag"
+        />
       </div>
-      <div v-if="addNewNote" class="absolute
+      <div
+        v-if="addNewNote"
+        class="absolute
         inset-0
         flex
         items-center
         justify-center
         bg-gray-700 bg-opacity-50
-        z-10">
+        z-10"
+      >
         <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
           <div class="card-body">
             <div class="relative">
-              <h1 class="text-2xl">Add New Note</h1>
-              <a class="btn btn-sm btn-circle absolute right-0 top-0" @click="addNote">
+              <h1 class="text-2xl">
+                Add New Note
+              </h1>
+              <a
+                class="btn btn-sm btn-circle absolute right-0 top-0"
+                @click="addNote"
+              >
                 ✕
               </a>
             </div>
@@ -24,26 +35,38 @@
               <NotesTipTapBar :editor="editor" />
               <div class="divider" />
               <editor-content :editor="titleEditor" />
-              <editor-content class="mt-4" :editor="editor" />
+              <editor-content
+                class="mt-4"
+                :editor="editor"
+              />
             </div>
             <div class="card-actions justify-end mr-0">
-              <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
+              <button
+                class="btn btn-sm btn-primary rounded-lg"
+                @click="saveNote"
+              >
                 <i class="ri-save-fill"></i>
               </button>
-              <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
+              <button
+                class="btn btn-sm btn-error rounded-lg"
+                @click="resetNote"
+              >
                 <i class="ri-delete-bin-7-fill"></i>
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div v-if="addNewTag" class="absolute
+      <div
+        v-if="addNewTag"
+        class="absolute
         inset-0
         flex
         items-center
         justify-center
         bg-gray-700 bg-opacity-50
-        z-10">
+        z-10"
+      >
         <NotesTagModal @add-tag="addTag" />
       </div>
       <slot />
