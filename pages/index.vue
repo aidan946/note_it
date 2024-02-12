@@ -3,7 +3,10 @@
     class="w-screen"
     data-theme="night"
   >
-    <form class="row flex-center flex" @submit.prevent="login">
+    <form
+      class="row flex-center flex"
+      @submit.prevent="login"
+    >
       <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
         <div class="card bg-neutral shadow-2xl p-24 mr-32">
           <h1 class="font-mono text-8xl">

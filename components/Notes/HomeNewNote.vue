@@ -5,14 +5,23 @@
         <NotesTipTapBar :editor="editor" />
         <div class="divider" />
         <editor-content :editor="titleEditor" />
-        <editor-content class="mt-4" :editor="editor" />
+        <editor-content
+          class="mt-4"
+          :editor="editor"
+        />
         <div class="flex space-x-2">
         </div>
         <div class="card-actions justify-end mr-0">
-          <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
+          <button
+            class="btn btn-sm btn-primary rounded-lg"
+            @click="saveNote"
+          >
             <i class="ri-save-fill"></i>
           </button>
-          <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
+          <button
+            class="btn btn-sm btn-error rounded-lg"
+            @click="resetNote"
+          >
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
@@ -75,8 +84,6 @@ const editor = ref(useEditor({
   },
 }))
 
-debugger
-
 async function saveNote() {
   const { data } = await client
     .from('notes')
@@ -89,7 +96,15 @@ async function saveNote() {
 }
 
 async function resetNote() {
-  titleEditor.value.chain().focus().setContent("Title").run()
-  editor.value.chain().focus().setContent("Body").run()
+  if (titleEditor.value) {
+    titleEditor.value.chain().focus().setContent("Title").run()
+  } else {
+    console.log('HomeNewNote titleEditor undefined')
+  }
+  if (editor.value) {
+    editor.value.chain().focus().setContent("Body").run()
+  } else {
+    console.log('HomeNewNote Editor undefined')
+  }
 }
 </script>
