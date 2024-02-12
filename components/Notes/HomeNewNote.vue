@@ -2,23 +2,17 @@
   <div class="editor border rounded-lg">
     <div class="card-compact rounded-lg bg-neutral text-neutral-content">
       <div class="card-body">
-        <div class="flex mt-3">
-          <editor-content :editor="titleEditor" />
-        </div>
-        <editor-content :editor="editor" />
+        <NotesTipTapBar :editor="editor" />
+        <div class="divider" />
+        <editor-content :editor="titleEditor" />
+        <editor-content class="mt-4" :editor="editor" />
         <div class="flex space-x-2">
         </div>
         <div class="card-actions justify-end mr-0">
-          <button
-            class="btn btn-sm btn-primary rounded-lg"
-            @click="saveNote"
-          >
+          <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
             <i class="ri-save-fill"></i>
           </button>
-          <button
-            class="btn btn-sm btn-error rounded-lg"
-            @click="resetNote"
-          >
+          <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
@@ -31,11 +25,12 @@
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Heading from '@tiptap/extension-heading'
+import Highlight from '@tiptap/extension-highlight'
+import StarterKit from '@tiptap/starter-kit'
 import Text from '@tiptap/extension-text'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -56,10 +51,13 @@ const titleEditor = ref(useEditor({
     },
   },
 }))
-const editor = useEditor({
+
+const editor = ref(useEditor({
   content: "Body",
   extensions: [
     Document,
+    Highlight,
+    StarterKit,
     TaskList,
     TaskItem.configure({
       nested: true,
@@ -75,9 +73,9 @@ const editor = useEditor({
       class: 'prose focus:outline-none pb-2',
     },
   },
-})
+}))
 
-console.log(editor)
+debugger
 
 async function saveNote() {
   const { data } = await client

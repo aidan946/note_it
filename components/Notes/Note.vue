@@ -88,11 +88,12 @@
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Heading from '@tiptap/extension-heading'
+import Highlight from '@tiptap/extension-highlight'
+import StarterKit from '@tiptap/starter-kit'
 import Text from '@tiptap/extension-text'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -150,6 +151,8 @@ const editor = ref(useEditor({
   content: noteBody,
   extensions: [
     Document,
+    Highlight,
+    StarterKit,
     TaskList,
     TaskItem.configure({
       nested: true,
