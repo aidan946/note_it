@@ -1,17 +1,7 @@
 <template>
   <div class="flex flex-wrap justify-center overflow-auto max-h-full">
-    <div
-      v-for="note in databaseNotes"
-      :key="note.id"
-      class="m-2"
-    >
-      <NotesNote
-        :id="note.id"
-        class="mt-2"
-        :title="note.title"
-        :body="note.body"
-        @delete-note="deleteNote"
-      />
+    <div v-for="note in databaseNotes" :key="note.id" class="m-2">
+      <NotesNote :id="note.id" class="mt-2" :title="note.title" :body="note.body" @delete-note="deleteNote" />
     </div>
   </div>
 </template>
@@ -33,20 +23,6 @@ let { data: databaseNotes } = await useAsyncData('databaseNotes', async () => {
   }
 
 })
-
-async function addNote(newNoteTitle: string, newNoteTag: string, newNoteBody: string) {
-  if (user.value && databaseNotes.value) {
-    const { data } = await client
-      .from('notes')
-      .insert([
-        { title: newNoteTitle, tag: newNoteTag, body: newNoteBody, user_id: user.value.id },
-      ])
-      .select('id, title, tag, body')
-    if (data) {
-      databaseNotes.value.push(data[0])
-    }
-  }
-}
 
 async function deleteNote(id: number) {
   if (databaseNotes.value) {

@@ -22,8 +22,8 @@
         </div>
         <VueDraggable v-model="in_progress" class="overflow-y-auto h-full" animation="150" group="people"
           ghost-class="ghost" @update="onUpdate" @add="onAdd(in_progress)" @remove="remove">
-          <div class="cursor-move h-30 bg-gray-500/5 rounded p-3 min-w-full" v-for="note in in_progress" :key="note.id">
-            <NotesNote class="min-w-full" :id="note.id" :title="note.title" :body="note.body" />
+          <div v-for="note in in_progress" :key="note.id" class="cursor-move h-30 bg-gray-500/5 rounded p-3 min-w-full">
+            <NotesNote :id="note.id" class="min-w-full" :title="note.title" :body="note.body" />
           </div>
         </VueDraggable>
       </div>
@@ -35,8 +35,8 @@
         </div>
         <VueDraggable v-model="done" class="overflow-y-auto h-full" animation="150" group="people" ghost-class="ghost"
           @update="onUpdate" @add="onAdd(done)" @remove="remove">
-          <div class="cursor-move h-30 bg-gray-500/5 rounded p-3" v-for="note in done" :key="note.id">
-            <NotesNote class="min-w-full" :id="note.id" :title="note.title" :body="note.body" />
+          <div v-for="note in done" :key="note.id" class="cursor-move h-30 bg-gray-500/5 rounded p-3">
+            <NotesNote :id="note.id" class="min-w-full" :title="note.title" :body="note.body" />
           </div>
         </VueDraggable>
       </div>

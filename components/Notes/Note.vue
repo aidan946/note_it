@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-      v-if="loadModal"
-      class="
+    <div v-if="loadModal" class="
         absolute
         inset-0
         flex
@@ -10,16 +8,12 @@
         justify-center
         bg-gray-700 bg-opacity-50
         z-10
-      "
-    >
+      ">
       <div class="card-compact rounded-lg w-fit bg-neutral text-neutral-content">
         <div class="card-body">
           <div class="relative">
             <editor-content :editor="titleEditor" />
-            <a
-              class="btn btn-sm btn-circle absolute right-0 top-0"
-              @click="toggleModal"
-            >
+            <a class="btn btn-sm btn-circle absolute right-0 top-0" @click="toggleModal">
               ✕
             </a>
           </div>
@@ -29,107 +23,59 @@
             <editor-content :editor="editor" />
           </div>
           <div class="flex space-x-2">
-            <div
-              v-for="tag in tags"
-              :key="tag.id"
-            >
+            <div v-for="tag in tags" :key="tag.id">
               <div class="group badge badge-primary mt-4 p-3">
                 {{ tag.name }}
-                <button
-                  class="hidden group-hover:flex btn btn-circle btn-outline btn-xs btn-error ml-1"
-                  @click="deleteNoteTag(tag.id)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                <button class="hidden group-hover:flex btn btn-circle btn-outline btn-xs btn-error ml-1"
+                  @click="deleteNoteTag(tag.id)">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
             </div>
-            <select
-              v-model="selectedTag"
-              class="select select-info select-xs w-24 mt-4"
-              @change="addNoteTag($event)"
-            >
-              <option
-                :key="'default'"
-                disabled
-                selected
-              >
+            <select v-model="selectedTag" class="select select-info select-xs w-24 mt-4" @change="addNoteTag($event)">
+              <option :key="'default'" disabled selected>
                 Add Tag
               </option>
-              <option
-                v-for=" tag in otherTags "
-                :key="tag.id"
-                :value="tag.id"
-              >
+              <option v-for=" tag in otherTags " :key="tag.id" :value="tag.id">
                 {{ tag.name }}
               </option>
             </select>
           </div>
           <div class="card-actions justify-end mr-0">
-            <button
-              class="btn btn-sm btn-primary rounded-lg"
-              @click="submitEdit"
-            >
+            <button class="btn btn-sm btn-primary rounded-lg" @click="submitEdit">
               <i class="ri-save-fill"></i>
             </button>
-            <button
-              class="btn btn-sm btn-error rounded-lg"
-              @click="$emit('deleteNote', id)"
-            >
+            <button class="btn btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
               <i class="ri-delete-bin-7-fill"></i>
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div
-      v-else
-      class="card-compact rounded-lg w-96 bg-neutral text-neutral-content v-0"
-    >
+    <div v-else class="card-compact rounded-lg w-96 bg-neutral text-neutral-content v-0">
       <div class="card-body">
         <div class="flex">
           <editor-content :editor="titleEditor" />
         </div>
         <editor-content :editor="editor" />
         <div class="flex space-x-2">
-          <div
-            v-for=" tag in tags "
-            :key="tag.id"
-          >
+          <div v-for=" tag in tags " :key="tag.id">
             <div class="badge badge-primary">
               {{ tag.name }}
             </div>
           </div>
         </div>
         <div class="card-actions justify-end mr-0">
-          <button
-            class="btn btn-sm btn-success rounded-lg"
-            @click="toggleModal"
-          >
+          <button class="btn btn-sm btn-success rounded-lg" @click="toggleModal">
             <i class="ri-edit-box-fill"></i>
           </button>
-          <button
-            class="btn btn-sm btn-primary rounded-lg"
-            @click="submitEdit"
-          >
+          <button class="btn btn-sm btn-primary rounded-lg" @click="submitEdit">
             <i class="ri-save-fill"></i>
           </button>
-          <button
-            class="btn btn-sm btn-error rounded-lg"
-            @click="$emit('deleteNote', id)"
-          >
+          <button class="btn btn-sm btn-error rounded-lg" @click="$emit('deleteNote', id)">
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
@@ -148,8 +94,8 @@ import Text from '@tiptap/extension-text'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+
 const client = useSupabaseClient()
-const user = useSupabaseUser()
 
 const props = defineProps({
   id: {
@@ -240,11 +186,12 @@ async function submitEdit() {
 }
 async function addNoteTag(event: any) {
   let tag_id: number = parseInt(event.target.value)
-  const { data } = await client
+  const { error } = await client
     .from('note-tags')
     .insert([
       { note_id: noteID, tag_id: tag_id },
     ])
+  if (error) console.log(error)
   tags.value.push(otherTags.value.find(tag => tag.id === tag_id))
   otherTags.value = otherTags.value.filter(i => i.id != tag_id)
   selectedTag.value = 'default'

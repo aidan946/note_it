@@ -1,12 +1,6 @@
 <template>
-  <div
-    class="w-screen"
-    data-theme="night"
-  >
-    <form
-      class="row flex-center flex"
-      @submit.prevent="login"
-    >
+  <div class="w-screen" data-theme="night">
+    <form class="row flex-center flex" @submit.prevent="login">
       <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
         <div class="card bg-neutral shadow-2xl p-24 mr-32">
           <h1 class="font-mono text-8xl">
@@ -16,33 +10,18 @@
         <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
           <div class="form-widget card bg-neutral shadow-2xl">
             <div class="card-body">
-              <input
-                v-model="email"
-                class="input input-bordered w-full max-w-xs"
-                type="email"
-                placeholder="Your email"
-              />
+              <input v-model="email" class="input input-bordered w-full max-w-xs" type="email" placeholder="Your email" />
               <br />
-              <input
-                v-model="password"
-                class="input input-bordered w-full max-w-xs"
-                type="password"
-                placeholder="Your password"
-              />
+              <input v-model="password" class="input input-bordered w-full max-w-xs" type="password"
+                placeholder="Your password" />
               <br />
               <span class="text-error">{{ supabaseError }}</span>
 
               <div class="card-actions">
-                <button
-                  class="btn btn-primary"
-                  @click="login"
-                >
+                <button class="btn btn-primary" @click="login">
                   Login
                 </button>
-                <button
-                  class="btn btn-outline btn-primary ml-2"
-                  @click="signup()"
-                >
+                <button class="btn btn-outline btn-primary ml-2" @click="signup()">
                   Sign Up
                 </button>
               </div>
@@ -75,7 +54,7 @@ async function login() {
     } else {
       navigateTo('/notes/home')
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log(error)
     supabaseError.value = error.error_description || error.message
   }

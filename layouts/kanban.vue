@@ -14,6 +14,7 @@ useHead({
     { name: 'description', content: 'Plan your notes!.' }
   ],
 })
+
 useSeoMeta({
   ogImage: '/note-logo.png'
 })

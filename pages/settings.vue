@@ -47,7 +47,7 @@ async function updateProfile() {
       })
       if (error) throw error
     }
-  } catch (error: any) {
+  } catch (error) {
     alert(error.message)
   } finally {
     loading.value = false
@@ -60,7 +60,7 @@ async function signOut() {
     let { error } = await client.auth.signOut()
     if (error) throw error
     user.value = null
-  } catch (error: any) {
+  } catch (error) {
     alert(error.message)
   } finally {
     loading.value = false

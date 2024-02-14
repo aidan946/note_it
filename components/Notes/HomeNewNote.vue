@@ -5,23 +5,14 @@
         <NotesTipTapBar :editor="editor" />
         <div class="divider" />
         <editor-content :editor="titleEditor" />
-        <editor-content
-          class="mt-4"
-          :editor="editor"
-        />
+        <editor-content class="mt-4" :editor="editor" />
         <div class="flex space-x-2">
         </div>
         <div class="card-actions justify-end mr-0">
-          <button
-            class="btn btn-sm btn-primary rounded-lg"
-            @click="saveNote"
-          >
+          <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
             <i class="ri-save-fill"></i>
           </button>
-          <button
-            class="btn btn-sm btn-error rounded-lg"
-            @click="resetNote"
-          >
+          <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
             <i class="ri-delete-bin-7-fill"></i>
           </button>
         </div>
@@ -40,8 +31,13 @@ import Text from '@tiptap/extension-text'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+
 const client = useSupabaseClient()
 const user = useSupabaseUser()
+
+if (!user.value) {
+  navigateTo('/')
+}
 
 const titleEditor = ref(useEditor({
   content: "Title",
@@ -85,14 +81,21 @@ const editor = ref(useEditor({
 }))
 
 async function saveNote() {
-  const { data } = await client
+  const { error } = await client
     .from('notes')
     .insert([
       { title: titleEditor.value.getHTML(), body: editor.value.getHTML(), user_id: user.value.id },
     ])
     .select('id, title, body')
-  titleEditor.value.chain().focus().setContent("Title").run()
-  editor.value.chain().focus().setContent("Body").run()
+  if (error) {
+    console.log('Error saving note:', error)
+  }
+  if (titleEditor.value) {
+    titleEditor.value.chain().focus().setContent("Title").run()
+  }
+  if (editor.value) {
+    editor.value.chain().focus().setContent("Body").run()
+  }
 }
 
 async function resetNote() {
