@@ -3,9 +3,7 @@
     <form class="row flex-center flex" @submit.prevent="login">
       <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
         <div class="card bg-neutral shadow-2xl p-24 mr-32">
-          <h1 class="font-mono text-8xl">
-            Note-It!
-          </h1>
+          <h1 class="font-mono text-8xl">Note-It!</h1>
         </div>
         <div class="flex min-h-screen justify-center items-center ml-auto mr-auto">
           <div class="form-widget card bg-neutral shadow-2xl">
@@ -18,9 +16,7 @@
               <span class="text-error">{{ supabaseError }}</span>
 
               <div class="card-actions">
-                <button class="btn btn-primary" @click="login">
-                  Login
-                </button>
+                <button class="btn btn-primary" @click="login">Login</button>
                 <button class="btn btn-outline btn-primary ml-2" @click="signup()">
                   Sign Up
                 </button>
@@ -33,52 +29,50 @@
   </div>
 </template>
 
-<script setup lang='ts'>
-const client = useSupabaseClient()
-const user = useSupabaseUser()
+<script setup lang="ts">
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
-if (user.value) navigateTo('/notes/home')
+if (user.value) navigateTo("/notes/home");
 
-const email = ref('')
-const password = ref('')
-let supabaseError = ref('')
+const email = ref("");
+const password = ref("");
+let supabaseError = ref("");
 
 async function login() {
   try {
     const { error } = await client.auth.signInWithPassword({
       email: email.value,
-      password: password.value
-    })
+      password: password.value,
+    });
     if (error) {
-      supabaseError.value = error.message
+      supabaseError.value = error.message;
     } else {
-      navigateTo('/notes/home')
+      navigateTo("/notes/home");
     }
-  } catch (error) {
-    console.log(error)
-    supabaseError.value = error.error_description || error.message
+  } catch (error: unknown) {
+    console.log(error);
+    supabaseError.value = error.error_description || error.message;
   }
-
 }
 async function signup() {
   try {
     const { error } = await client.auth.signUp({
       email: email.value,
-      password: password.value
-    })
-    if (error) throw error
-  } catch (error: any) {
-    supabaseError.value = error.error_description || error.message
+      password: password.value,
+    });
+    if (error) throw error;
+  } catch (error: unknown) {
+    supabaseError.value = error.error_description || error.message;
   }
-
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap");
 
 body {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
   background-color: rgb(15 23 41);
 }
 

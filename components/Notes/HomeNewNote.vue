@@ -2,18 +2,26 @@
   <div class="editor border rounded-lg">
     <div class="card-compact rounded-lg bg-neutral text-neutral-content">
       <div class="card-body">
-        <NotesTipTapBar :editor="editor" />
+        <NotesTipTapBar :editor="homeEditor" />
         <div class="divider" />
         <editor-content :editor="titleEditor" />
-        <editor-content class="mt-4" :editor="editor" />
-        <div class="flex space-x-2">
-        </div>
+        <editor-content
+          class="mt-4"
+          :editor="homeEditor"
+        />
+        <div class="flex space-x-2" />
         <div class="card-actions justify-end mr-0">
-          <button class="btn btn-sm btn-primary rounded-lg" @click="saveNote">
-            <i class="ri-save-fill"></i>
+          <button
+            class="btn btn-sm btn-primary rounded-lg"
+            @click="saveNote"
+          >
+            <i class="ri-save-fill" />
           </button>
-          <button class="btn btn-sm btn-error rounded-lg" @click="resetNote">
-            <i class="ri-delete-bin-7-fill"></i>
+          <button
+            class="btn btn-sm btn-error rounded-lg"
+            @click="resetNote"
+          >
+            <i class="ri-delete-bin-7-fill" />
           </button>
         </div>
       </div>
@@ -57,7 +65,7 @@ const titleEditor = ref(useEditor({
   },
 }))
 
-const editor = ref(useEditor({
+const homeEditor = ref(useEditor({
   content: "Body",
   extensions: [
     Document,
@@ -93,8 +101,8 @@ async function saveNote() {
   if (titleEditor.value) {
     titleEditor.value.chain().focus().setContent("Title").run()
   }
-  if (editor.value) {
-    editor.value.chain().focus().setContent("Body").run()
+  if (homeEditor.value) {
+    homeEditor.value.chain().focus().setContent("Body").run()
   }
 }
 
@@ -104,8 +112,8 @@ async function resetNote() {
   } else {
     console.log('HomeNewNote titleEditor undefined')
   }
-  if (editor.value) {
-    editor.value.chain().focus().setContent("Body").run()
+  if (homeEditor.value) {
+    homeEditor.value.chain().focus().setContent("Body").run()
   } else {
     console.log('HomeNewNote Editor undefined')
   }
