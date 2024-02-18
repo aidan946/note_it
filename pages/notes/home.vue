@@ -1,7 +1,9 @@
 <template>
-  <div class="w-full mt-2 pr-56
+  <div
+    class="w-full mt-2 pr-56
         inset-0
-  ">
+  "
+  >
     <div class="mt-8">
       <h1 class="flex justify-center text-2xl ">
         Add a new Note
@@ -15,8 +17,18 @@
         </h1>
       </div>
       <div class="flex flex-wrap justify-center">
-        <div v-for="note in databaseNotes" :key="note.id" class="m-2">
-          <NotesNote :id="note.id" class="" :title="note.title" :body="note.body" @delete-note="deleteNote" />
+        <div
+          v-for="note in databaseNotes"
+          :key="note.id"
+          class="m-2"
+        >
+          <NotesNote
+            :id="note.id"
+            class=""
+            :title="note.title"
+            :body="note.body"
+            @delete-note="deleteNote"
+          />
         </div>
       </div>
     </div>
@@ -31,7 +43,7 @@ definePageMeta({
   layout: 'notes'
 })
 
-let { data: databaseNotes } = await useAsyncData('databaseNotes', async () => {
+const { data: databaseNotes } = await useAsyncData('databaseNotes', async () => {
   if (user.value) {
     const { data } = await client.from('notes').select('id, title, body').eq('user_id', user.value.id).limit(4)
     return data
@@ -44,11 +56,8 @@ async function deleteNote(id: number) {
       .from('notes')
       .delete()
       .eq('id', id)
-    let newDatabaseNotes = databaseNotes.value.filter((i: { id: number; title: string; body: string }) => i.id != id)
+    const newDatabaseNotes = databaseNotes.value.filter((i: { id: number; title: string; body: string }) => i.id != id)
     databaseNotes.value = newDatabaseNotes
   }
-}
-async function filterNotes(id: number) {
-
 }
 </script>
