@@ -98,6 +98,8 @@ const user = useSupabaseUser()
 const addNewNote = ref(false)
 const addNewTag = ref(false)
 
+const notes = useState('databaseNotes')
+
 const titleEditor = ref(useEditor({
   content: "Title",
   extensions: [
@@ -167,11 +169,10 @@ async function resetNote() {
 }
 
 async function filterNotes(id: number) {
-  console.log(id)
-  let { data: noteTags } = await client.from('note-tags').select('tags(id, name, color)').eq('tag_id', id)
+  const { data: noteTags } = await client.from('note-tags').select('notes(id, title, body)').eq('tag_id', id)
   if (noteTags) {
-    noteTags = noteTags.map(function (tag) {
-      return tag['tags']
+    notes.value = noteTags.map(function (note) {
+      return note['notes']
     })
   }
 }
