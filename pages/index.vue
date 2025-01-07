@@ -17,7 +17,7 @@
 
               <div class="card-actions">
                 <button class="btn btn-primary" @click="login">Login</button>
-                <button class="btn btn-outline btn-primary ml-2" @click="signup()">
+                <button class="btn btn-outline btn-primary ml-2" @click="signup">
                   Sign Up
                 </button>
               </div>
@@ -37,34 +37,31 @@ if (user.value) navigateTo("/notes/home");
 
 const email = ref("");
 const password = ref("");
-let supabaseError = ref("");
+const supabaseError = ref("");
 
 async function login() {
-  try {
-    const { error } = await client.auth.signInWithPassword({
-      email: email.value,
-      password: password.value,
-    });
-    if (error) {
-      supabaseError.value = error.message;
-    } else {
-      navigateTo("/notes/home");
-    }
-  } catch (error: unknown) {
-    console.log(error);
-    supabaseError.value = error.error_description || error.message;
-  }
+	console.log("Hit");
+	const { error } = await client.auth.signInWithPassword({
+		email: email.value,
+		password: password.value,
+	});
+	if (error) console.log(error);
+	if (error) {
+		supabaseError.value = error.message;
+	} else {
+		navigateTo("/notes/home");
+	}
 }
 async function signup() {
-  try {
-    const { error } = await client.auth.signUp({
-      email: email.value,
-      password: password.value,
-    });
-    if (error) throw error;
-  } catch (error: unknown) {
-    supabaseError.value = error.error_description || error.message;
-  }
+	try {
+		const { error } = await client.auth.signUp({
+			email: email.value,
+			password: password.value,
+		});
+		if (error) throw error;
+	} catch (error: unknown) {
+		supabaseError.value = error.error_description || error.message;
+	}
 }
 </script>
 

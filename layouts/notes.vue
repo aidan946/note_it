@@ -70,110 +70,122 @@
 </template>
 
 <script setup lang="ts">
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Heading from '@tiptap/extension-heading'
-import Highlight from '@tiptap/extension-highlight'
-import StarterKit from '@tiptap/starter-kit'
-import Text from '@tiptap/extension-text'
-import TaskItem from '@tiptap/extension-task-item'
-import TaskList from '@tiptap/extension-task-list'
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import 'remixicon/fonts/remixicon.css'
+import Document from "@tiptap/extension-document";
+import Paragraph from "@tiptap/extension-paragraph";
+import Heading from "@tiptap/extension-heading";
+import Highlight from "@tiptap/extension-highlight";
+import StarterKit from "@tiptap/starter-kit";
+import Text from "@tiptap/extension-text";
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import { useEditor, EditorContent } from "@tiptap/vue-3";
+import "remixicon/fonts/remixicon.css";
 
 useHead({
-  title: 'Note-It',
-  meta: [
-    { name: 'description', content: 'Note your plans!.' }
-  ],
-})
+	title: "Note-It",
+	meta: [{ name: "description", content: "Note your plans!." }],
+});
 
 useSeoMeta({
-  ogImage: '/note-logo.png'
-})
+	ogImage: "/note-logo.png",
+});
 
-const client = useSupabaseClient()
-const user = useSupabaseUser()
+definePageMeta({
+	middleware: "auth",
+});
 
-const addNewNote = ref(false)
-const addNewTag = ref(false)
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
-const notes = useState('databaseNotes')
+const addNewNote = ref(false);
+const addNewTag = ref(false);
 
-const titleEditor = ref(useEditor({
-  content: "Title",
-  extensions: [
-    Document,
-    Heading.configure({
-      HTMLAttributes: {
-        class: 'card-title text-2xl bold mb-3'
-      },
-    }),
-    Text,
-  ],
-  editorProps: {
-    attributes: {
-      class: 'prose focus:outline-none',
-    },
-  },
-}))
+const notes = useState("databaseNotes");
 
-const editor = ref(useEditor({
-  content: "Body",
-  extensions: [
-    Document,
-    Highlight,
-    StarterKit,
-    TaskList,
-    TaskItem.configure({
-      nested: true,
-    }),
-    Paragraph.configure({
-      HTMLAttributes: {
-      },
-    }),
-    Text,
-  ],
-  editorProps: {
-    attributes: {
-      class: 'prose focus:outline-none pb-2',
-    },
-  },
-}))
+const titleEditor = ref(
+	useEditor({
+		content: "Title",
+		extensions: [
+			Document,
+			Heading.configure({
+				HTMLAttributes: {
+					class: "card-title text-2xl bold mb-3",
+				},
+			}),
+			Text,
+		],
+		editorProps: {
+			attributes: {
+				class: "prose focus:outline-none",
+			},
+		},
+	}),
+);
+
+const editor = ref(
+	useEditor({
+		content: "Body",
+		extensions: [
+			Document,
+			Highlight,
+			StarterKit,
+			TaskList,
+			TaskItem.configure({
+				nested: true,
+			}),
+			Paragraph.configure({
+				HTMLAttributes: {},
+			}),
+			Text,
+		],
+		editorProps: {
+			attributes: {
+				class: "prose focus:outline-none pb-2",
+			},
+		},
+	}),
+);
 
 function addNote() {
-  addNewNote.value = !addNewNote.value
+	addNewNote.value = !addNewNote.value;
 }
 function addTag() {
-  addNewTag.value = !addNewTag.value
+	addNewTag.value = !addNewTag.value;
 }
 
 async function saveNote() {
-  if (user.value && titleEditor.value && editor.value) {
-    await client
-      .from('notes')
-      .insert([
-        { title: titleEditor.value.getHTML(), body: editor.value.getHTML(), user_id: user.value.id },
-      ])
-      .select('id, title, body')
-    titleEditor.value.chain().focus().setContent("Title").run()
-    editor.value.chain().focus().setContent("Body").run()
-  }
+	if (user.value && titleEditor.value && editor.value) {
+		await client
+			.from("notes")
+			.insert([
+				{
+					title: titleEditor.value.getHTML(),
+					body: editor.value.getHTML(),
+					user_id: user.value.id,
+				},
+			])
+			.select("id, title, body");
+		titleEditor.value.chain().focus().setContent("Title").run();
+		editor.value.chain().focus().setContent("Body").run();
+	}
 }
 
 async function resetNote() {
-  if (titleEditor.value && editor.value) {
-    titleEditor.value.chain().focus().setContent("Title").run()
-    editor.value.chain().focus().setContent("Body").run()
-  }
+	if (titleEditor.value && editor.value) {
+		titleEditor.value.chain().focus().setContent("Title").run();
+		editor.value.chain().focus().setContent("Body").run();
+	}
 }
 
 async function filterNotes(id: number) {
-  const { data: noteTags } = await client.from('note-tags').select('notes(id, title, body)').eq('tag_id', id)
-  if (noteTags) {
-    notes.value = noteTags.map(function (note) {
-      return note['notes']
-    })
-  }
+	const { data: noteTags } = await client
+		.from("note-tags")
+		.select("notes(id, title, body)")
+		.eq("tag_id", id);
+	if (noteTags) {
+		notes.value = noteTags.map(function (note) {
+			return note["notes"];
+		});
+	}
 }
 </script>
